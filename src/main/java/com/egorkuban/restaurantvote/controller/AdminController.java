@@ -25,7 +25,7 @@ public class AdminController {
 
     //Админ отправляет id ресторана - Ответ: id + статус
     @PostMapping("/restaurants/{id}/delete")
-    public ResponseEntity<Long> deleteRestaurantResponse(@PathVariable Long id) {
+    public ResponseEntity<Long> deleteRestaurant(@PathVariable Long id) {
         return new ResponseEntity<>(adminService.deleteRestaurant(id), HttpStatus.OK);
     }
 
