@@ -23,7 +23,7 @@ public class AdminController {
                 + "Address: " + restaurant.getAddress() + "\n"
                 + "Id: " + restaurant.getId(), HttpStatus.CREATED);
     }
-
+    //
     //Админ отправляет id ресторана - Ответ: id + статус
     @PostMapping("/restaurants/{id}/delete")
     public ResponseEntity<String> deleteRestaurantResponse(@PathVariable Long id) {

@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/rest")
 public class UserController {
     private final UserService userService;
-
+    //
     //Юзер отправляет запрос - Ответ: список ресторанов
     @GetMapping("/restaurants")
     public ResponseEntity<List<Restaurant>> getAllRestaurantsResponse() {
