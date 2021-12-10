@@ -1,7 +1,9 @@
 package com.egorkuban.restaurantvote.controller;
 
-import com.egorkuban.restaurantvote.model.Restaurant;
-import com.egorkuban.restaurantvote.model.dto.MealTo;
+import com.egorkuban.restaurantvote.model.RestaurantDto;
+import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
+import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
+import com.egorkuban.restaurantvote.model.response.CreateRestaurantResponse;
 import com.egorkuban.restaurantvote.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,25 +19,20 @@ public class AdminController {
 
     ///Админ отправляет Имя + Адрес - Ответ Ресторан : Id, имя, адрес
     @PostMapping("/create")
-    public ResponseEntity<String> createRestaurantToResponse(@RequestBody Restaurant restaurant) {
-        adminService.createRestaurantRequest(restaurant);
-        return new ResponseEntity<>("Restaurant: " + restaurant.getName() + "\n"
-                + "Address: " + restaurant.getAddress() + "\n"
-                + "Id: " + restaurant.getId(), HttpStatus.CREATED);
+    public ResponseEntity<CreateRestaurantResponse> createRestaurant(@RequestBody CreateRestaurantRequest request) {
+        return new ResponseEntity<>(adminService.createRestaurant(request), HttpStatus.CREATED);
     }
-    //
+
     //Админ отправляет id ресторана - Ответ: id + статус
     @PostMapping("/restaurants/{id}/delete")
-    public ResponseEntity<String> deleteRestaurantResponse(@PathVariable Long id) {
-        adminService.deleteRestaurantRequest(id);
-        return new ResponseEntity<>("Restaurant " + id + " removed from the list", HttpStatus.OK);
+    public ResponseEntity<Long> deleteRestaurantResponse(@PathVariable Long id) {
+        return new ResponseEntity<>(adminService.deleteRestaurant(id), HttpStatus.OK);
     }
+
     //Админ отправляет Список еды + id ресторана - Ответ: Ресторан + список еды
-    @PostMapping("/restaurants/{id}/meals") //Я вижу такую логику, поступает еда для ресторана
-    // это MealTo, из нее я достаю стоимость и цену и кладу в список, который отправляется в Menu
-    public ResponseEntity<String> createMealsResponse(@RequestBody MealTo mealTo, @PathVariable int id) {
-        adminService.createMealsRequest(mealTo, id);
-        return new ResponseEntity<>("Я хз", HttpStatus.OK);
+    @PostMapping("/restaurants/{id}/meals")
+    public ResponseEntity<RestaurantDto> createMealsList(@RequestBody CreateMealRequest request, @PathVariable Long id) {
+        return new ResponseEntity<>(adminService.createRestaurantDto(request, id), HttpStatus.CREATED);
     }
 
 }

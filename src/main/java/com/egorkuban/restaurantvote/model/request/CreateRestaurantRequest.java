@@ -1,12 +1,11 @@
-package com.egorkuban.restaurantvote.model.dto;
+package com.egorkuban.restaurantvote.model.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class RestaurantTo {
-    private Long id;
+public class CreateRestaurantRequest {
     private String name;
     private String address;
 }

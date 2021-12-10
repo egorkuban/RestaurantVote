@@ -1,8 +1,10 @@
 package com.egorkuban.restaurantvote.service;
 
-import com.egorkuban.restaurantvote.model.Meal;
-import com.egorkuban.restaurantvote.model.Restaurant;
-import com.egorkuban.restaurantvote.model.dto.MealTo;
+import com.egorkuban.restaurantvote.model.RestaurantDto;
+import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
+import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
+import com.egorkuban.restaurantvote.model.response.CreatMealResponse;
+import com.egorkuban.restaurantvote.model.response.CreateRestaurantResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,27 +15,39 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class AdminService {
 
-    static final List<Restaurant> RESTAURANT_LIST = new ArrayList<>();
+    static final List<CreateRestaurantResponse> RESTAURANTS_LIST = new ArrayList<>();
+    static final List<RestaurantDto> RESTAURANTS_WITH_MEALS_LIST = new ArrayList<>();
 
     private static final AtomicLong RESTAURANT_ID = new AtomicLong(100000);
 
 
     @Transactional
-    public void createRestaurantRequest(Restaurant restaurant) {
+    public CreateRestaurantResponse createRestaurant(CreateRestaurantRequest createRestaurantRequest) {
         final long restaurantId = RESTAURANT_ID.incrementAndGet();
-        restaurant.setId(restaurantId);
-        RESTAURANT_LIST.add(restaurant);
+        CreateRestaurantResponse createRestaurantResponse = new CreateRestaurantResponse();
+        createRestaurantResponse.setId(restaurantId);
+        RESTAURANTS_LIST.add(createRestaurantResponse);
 
+        return createRestaurantResponse;
     }
 
     @Transactional
-    public List<Meal> createMealsRequest (MealTo mealTo, int id) {
+    public List<CreatMealResponse> createMealsList(CreateMealRequest request, Long id) {
+        //из еды делаем необходимый нам список
         return null;
     }
 
+    @Transactional
+    public RestaurantDto createRestaurantDto(CreateMealRequest request, Long id) {
+        RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setMeals(createMealsList(request, id));
+        restaurantDto.setId(id);
+        return restaurantDto;
+    }
 
     @Transactional
-    public void deleteRestaurantRequest(Long id) {
-        RESTAURANT_LIST.removeIf(i -> i.getId().equals(id));
+    public Long deleteRestaurant(Long id) {
+        RESTAURANTS_LIST.removeIf(i -> i.getId().equals(id));
+        return id;
     }
 }
