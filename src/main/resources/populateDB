@@ -1,0 +1,49 @@
+DELETE from USER_ROLES;
+DELETE FROM MEAL;
+DELETE FROM RESTAURANT;
+DELETE FROM USERS;
+
+ALTER SEQUENCE global_seq RESTART WITH 100_000;
+
+INSERT INTO USERS (ID, NAME, EMAIL, PASSWORD, DATE_TIME)
+VALUES (100000, 'User0', 'user0@yandex.ru', 'password', now),
+       (100001, 'User1', 'user1@mail.ru', 'password1', now),
+       (100002, 'User2', 'user2@rambler.ru', 'password2', now),
+       (100003, 'User3', 'user3@outlook.com', 'password3', now),
+       (100004, 'User4', 'user4@google.com', 'password4', now),
+       (100005, 'User5', 'user5@hotmail.com', 'password5', now),
+       (100006, 'User6', 'user6@list.ru', 'password6', now),
+       (100007, 'User7', 'user7@bk.ru', 'password7', now),
+       (100008, 'User8', 'user8@topjava.ru', 'password8', now),
+       (100009, 'User9', 'user9@yahoo.com', 'password9', now),
+       (100010, 'Admin10', 'admin10@gmail.com', 'admin', now);
+
+INSERT INTO RESTAURANT (ID, NAME)
+VALUES (100011, 'Ресторан'),
+       (100012, 'Кафе'),
+       (100013, 'Столовая'),
+       (100014, 'Закусочная'),
+       (100015, 'Бистро'),
+       (100016, 'Бар');
+
+INSERT INTO USER_ROLES (role, user_id)
+VALUES ('USER', 100000),
+       ('USER', 100001),
+       ('USER', 100002),
+       ('USER', 100003),
+       ('USER', 100004),
+       ('USER', 100005),
+       ('USER', 100006),
+       ('USER', 100007),
+       ('USER', 100008),
+       ('USER', 100009),
+       ('ADMIN', 100010);
+INSERT INTO MEAL (NAME, PRICE, DATE_TIME,RESTAURANT_ID)
+VALUES ('Борщ', '500', now,100011),
+       ('Пюре', '300', now,100012),
+       ('Пельмени', '250', now,100013),
+       ('Салат', '100', now,100014),
+       ('Суп', '190', now,100015),
+       ('Пироженное', '340', now,100016),
+       ('Оливье', '140', now,100015),
+       ('Мороженное', '80', now,100014)
