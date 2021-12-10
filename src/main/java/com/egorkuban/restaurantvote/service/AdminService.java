@@ -39,17 +39,19 @@ public class AdminService {
     }
 
     @Transactional
-    public List<CreatMealResponse> createMealsList(CreateMealRequest request, Long id) {
+    public List<MealDto> createMealsList(CreateMealRequest request) {
         //из еды делаем необходимый нам список
         return null;
     }
 
     @Transactional
-    public RestaurantDto createMeals(CreateMealRequest request, Long id) {
+    public CreatMealResponse createMeals(CreateMealRequest request, Long id) {
+        CreatMealResponse creatMealResponse = new CreatMealResponse();
         RestaurantDto restaurantDto = new RestaurantDto();
-        restaurantDto.setMeals(createMealsList(request, id));
+        restaurantDto.setMeals(createMealsList(request));
         restaurantDto.setId(id);
-        return restaurantDto;
+        creatMealResponse.setRestaurantDto(restaurantDto);
+        return creatMealResponse;
     }
 
     @Transactional

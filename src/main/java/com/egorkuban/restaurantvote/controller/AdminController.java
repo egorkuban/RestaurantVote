@@ -32,7 +32,7 @@ public class AdminController {
 
     //Админ отправляет Список еды + id ресторана - Ответ: Ресторан + список еды
     @PostMapping("/restaurants/{id}/meals")
-    public ResponseEntity<RestaurantDto> createMeals(@RequestBody CreateMealRequest request, @PathVariable Long id) {
+    public ResponseEntity<CreatMealResponse> createMeals(@RequestBody CreateMealRequest request, @PathVariable Long id) {
         return new ResponseEntity<>(adminService.createMeals(request, id), HttpStatus.CREATED);
     }
 
