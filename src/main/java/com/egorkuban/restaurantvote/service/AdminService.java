@@ -1,5 +1,6 @@
 package com.egorkuban.restaurantvote.service;
 
+import com.egorkuban.restaurantvote.model.MealDto;
 import com.egorkuban.restaurantvote.model.RestaurantDto;
 import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
@@ -24,10 +25,16 @@ public class AdminService {
     @Transactional
     public CreateRestaurantResponse createRestaurant(CreateRestaurantRequest createRestaurantRequest) {
         final long restaurantId = RESTAURANT_ID.incrementAndGet();
+
+
+        RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setAddress(createRestaurantRequest.getAddress());
+        restaurantDto.setName(createRestaurantRequest.getName());
+
         CreateRestaurantResponse createRestaurantResponse = new CreateRestaurantResponse();
         createRestaurantResponse.setId(restaurantId);
+        createRestaurantResponse.setRestaurantDto(restaurantDto);
         RESTAURANTS_LIST.add(createRestaurantResponse);
-
         return createRestaurantResponse;
     }
 
@@ -38,7 +45,7 @@ public class AdminService {
     }
 
     @Transactional
-    public RestaurantDto createRestaurantDto(CreateMealRequest request, Long id) {
+    public RestaurantDto createMeals(CreateMealRequest request, Long id) {
         RestaurantDto restaurantDto = new RestaurantDto();
         restaurantDto.setMeals(createMealsList(request, id));
         restaurantDto.setId(id);

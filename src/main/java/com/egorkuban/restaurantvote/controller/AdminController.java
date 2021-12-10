@@ -3,6 +3,7 @@ package com.egorkuban.restaurantvote.controller;
 import com.egorkuban.restaurantvote.model.RestaurantDto;
 import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
+import com.egorkuban.restaurantvote.model.response.CreatMealResponse;
 import com.egorkuban.restaurantvote.model.response.CreateRestaurantResponse;
 import com.egorkuban.restaurantvote.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class AdminController {
 
     //Админ отправляет Список еды + id ресторана - Ответ: Ресторан + список еды
     @PostMapping("/restaurants/{id}/meals")
-    public ResponseEntity<RestaurantDto> createMealsList(@RequestBody CreateMealRequest request, @PathVariable Long id) {
-        return new ResponseEntity<>(adminService.createRestaurantDto(request, id), HttpStatus.CREATED);
+    public ResponseEntity<RestaurantDto> createMeals(@RequestBody CreateMealRequest request, @PathVariable Long id) {
+        return new ResponseEntity<>(adminService.createMeals(request, id), HttpStatus.CREATED);
     }
 
 }

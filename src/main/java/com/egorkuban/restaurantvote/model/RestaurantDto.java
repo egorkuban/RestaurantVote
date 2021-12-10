@@ -10,5 +10,7 @@ import java.util.List;
 @Setter
 public class RestaurantDto {
     private Long id;
-    private List<CreatMealResponse> meals;
+    private String name;
+    private String Address;
+    List<CreatMealResponse> meals;
 }
