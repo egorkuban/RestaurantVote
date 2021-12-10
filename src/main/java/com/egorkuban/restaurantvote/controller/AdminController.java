@@ -1,6 +1,5 @@
 package com.egorkuban.restaurantvote.controller;
 
-import com.egorkuban.restaurantvote.model.RestaurantDto;
 import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
 import com.egorkuban.restaurantvote.model.response.CreatMealResponse;

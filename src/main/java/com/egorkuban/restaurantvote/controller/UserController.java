@@ -1,7 +1,6 @@
 package com.egorkuban.restaurantvote.controller;
 
 import com.egorkuban.restaurantvote.model.RestaurantDto;
-import com.egorkuban.restaurantvote.model.request.VoteRequest;
 import com.egorkuban.restaurantvote.model.response.VoteResponse;
 import com.egorkuban.restaurantvote.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ public class UserController {
 
     //
     //Юзер отправляет запрос - Ответ: список ресторанов
+    //проверки в отдельный метод потом уберу
     @GetMapping("/restaurants")
     public ResponseEntity<List<RestaurantDto>> getAllRestaurants() {
         final List<RestaurantDto> allRestaurantsWithMeals = userService.getAllRestaurants();
@@ -31,13 +31,14 @@ public class UserController {
 
     //Юзер отправляет Id ресторана - Ответ: id ресторана + дата
     @PostMapping("/restaurants/{id}/vote")
-    public ResponseEntity<VoteResponse> vote(@RequestBody VoteRequest request) {
+    public ResponseEntity<VoteResponse> vote(@PathVariable Long id) {
+        //проверки в отдельный метод потом уберу
         LocalDateTime localDateTime = LocalDateTime.now();
         LocalDateTime dateTimeVote = LocalDateTime.of(LocalDate.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(),
                 10, 59, 59);
         return localDateTime.isBefore(dateTimeVote)
-                ? new ResponseEntity<>(userService.vote(request), HttpStatus.ACCEPTED)
-                : new ResponseEntity<>(userService.vote(request), HttpStatus.FORBIDDEN);
+                ? new ResponseEntity<>(userService.vote(id), HttpStatus.ACCEPTED)
+                : new ResponseEntity<>(userService.vote(id), HttpStatus.FORBIDDEN);
 
     }
 }

@@ -1,7 +1,6 @@
 package com.egorkuban.restaurantvote.service;
 
 import com.egorkuban.restaurantvote.model.RestaurantDto;
-import com.egorkuban.restaurantvote.model.request.VoteRequest;
 import com.egorkuban.restaurantvote.model.response.VoteResponse;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ public class UserService {
         return new ArrayList<>(AdminService.RESTAURANTS_WITH_MEALS_LIST);
     }
 
-    public VoteResponse vote(VoteRequest request) {
+    public VoteResponse vote(Long id) {
         return null;
     }
 }

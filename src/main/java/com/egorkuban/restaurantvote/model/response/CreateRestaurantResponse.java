@@ -7,6 +7,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateRestaurantResponse {
-    Long id;
     RestaurantDto restaurantDto;
 }

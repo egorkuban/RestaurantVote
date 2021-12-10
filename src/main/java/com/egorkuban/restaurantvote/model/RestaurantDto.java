@@ -1,6 +1,5 @@
 package com.egorkuban.restaurantvote.model;
 
-import com.egorkuban.restaurantvote.model.response.CreatMealResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -30,9 +30,9 @@ public class AdminService {
         RestaurantDto restaurantDto = new RestaurantDto();
         restaurantDto.setAddress(createRestaurantRequest.getAddress());
         restaurantDto.setName(createRestaurantRequest.getName());
+        restaurantDto.setId(restaurantId);
 
         CreateRestaurantResponse createRestaurantResponse = new CreateRestaurantResponse();
-        createRestaurantResponse.setId(restaurantId);
         createRestaurantResponse.setRestaurantDto(restaurantDto);
         RESTAURANTS_LIST.add(createRestaurantResponse);
         return createRestaurantResponse;
@@ -56,7 +56,7 @@ public class AdminService {
 
     @Transactional
     public Long deleteRestaurant(Long id) {
-        RESTAURANTS_LIST.removeIf(i -> i.getId().equals(id));
+        RESTAURANTS_LIST.removeIf(i -> i.getRestaurantDto().getId().equals(id));
         return id;
     }
 }
