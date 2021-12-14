@@ -2,16 +2,23 @@ package com.egorkuban.restaurantvote.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
-@ToString
 public class RestaurantDto {
     private Long id;
     private String name;
-    private String Address;
+    private String address;
     List<MealDto> meals;
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "name='" + name + '\'' +
+                ", address=" + address +
+                ", id=" + id +
+                '}';
+    }
 }

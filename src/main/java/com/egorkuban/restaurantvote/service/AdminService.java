@@ -1,62 +1,39 @@
 package com.egorkuban.restaurantvote.service;
 
-import com.egorkuban.restaurantvote.model.MealDto;
+import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
+import com.egorkuban.restaurantvote.jpa.repository.MealRepository;
+import com.egorkuban.restaurantvote.jpa.repository.RestaurantRepository;
 import com.egorkuban.restaurantvote.model.RestaurantDto;
-import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
-import com.egorkuban.restaurantvote.model.response.CreatMealResponse;
 import com.egorkuban.restaurantvote.model.response.CreateRestaurantResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
 @Service
+@RequiredArgsConstructor
 public class AdminService {
 
-    static final List<CreateRestaurantResponse> RESTAURANTS_LIST = new ArrayList<>();
-    static final List<RestaurantDto> RESTAURANTS_WITH_MEALS_LIST = new ArrayList<>();
-
-    private static final AtomicLong RESTAURANT_ID = new AtomicLong(100000);
+    private final RestaurantRepository restaurantRepository;
+    private final MealRepository mealRepository;
 
 
     @Transactional
-    public CreateRestaurantResponse createRestaurant(CreateRestaurantRequest createRestaurantRequest) {
-        final long restaurantId = RESTAURANT_ID.incrementAndGet();
-
+    public CreateRestaurantResponse createRestaurant(CreateRestaurantRequest request) {
+        RestaurantEntity restaurant = new RestaurantEntity();
+        restaurant.setName(request.getName());
+        restaurant.setAddress(request.getAddress());
+        restaurantRepository.save(restaurant);
 
         RestaurantDto restaurantDto = new RestaurantDto();
-        restaurantDto.setAddress(createRestaurantRequest.getAddress());
-        restaurantDto.setName(createRestaurantRequest.getName());
-        restaurantDto.setId(restaurantId);
+        restaurantDto.setName(request.getName());
+        restaurantDto.setAddress(request.getAddress());
+        restaurantDto.setId(restaurant.getId());
 
-        CreateRestaurantResponse createRestaurantResponse = new CreateRestaurantResponse();
-        createRestaurantResponse.setRestaurantDto(restaurantDto);
-        RESTAURANTS_LIST.add(createRestaurantResponse);
-        return createRestaurantResponse;
-    }
+        CreateRestaurantResponse restaurantResponse = new CreateRestaurantResponse();
+        restaurantResponse.setRestaurantDto(restaurantDto);
 
-    @Transactional
-    public List<MealDto> createMealsList(CreateMealRequest request) {
-        //из еды делаем необходимый нам список
-        return null;
-    }
 
-    @Transactional
-    public CreatMealResponse createMeals(CreateMealRequest request, Long id) {
-        CreatMealResponse creatMealResponse = new CreatMealResponse();
-        RestaurantDto restaurantDto = new RestaurantDto();
-        restaurantDto.setMeals(createMealsList(request));
-        restaurantDto.setId(id);
-        creatMealResponse.setRestaurantDto(restaurantDto);
-        return creatMealResponse;
-    }
-
-    @Transactional
-    public Long deleteRestaurant(Long id) {
-        RESTAURANTS_LIST.removeIf(i -> i.getRestaurantDto().getId().equals(id));
-        return id;
+        return restaurantResponse;
     }
 }

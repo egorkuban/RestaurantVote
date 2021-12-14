@@ -24,6 +24,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING) //Понял данную аннотацию и для чего она здесь.
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
+    @JoinColumn(name = "id")
     @ElementCollection(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
