@@ -17,7 +17,7 @@ public class VoteEntity {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
-    private RestaurantEntity restaurants;
+    private RestaurantEntity restaurant;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

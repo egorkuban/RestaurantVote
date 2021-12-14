@@ -21,10 +21,7 @@ public class RestaurantEntity {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(mappedBy = "restaurantId")
+    @OneToMany(mappedBy = "restaurant")
     private List<MealEntity> meals;
-
-    @OneToMany(mappedBy = "restaurants")
-    private List<VoteEntity> votes;
 
 }
