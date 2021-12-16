@@ -54,13 +54,15 @@ public class AdminService {
                             .setName(mealRequest.getName())
                             .setPrice(mealRequest.getPrice())
                             .setAddTime(mealRequest.getAddTime())
-                            .setRestaurant(restaurantRepository.getById(id));
+                            .setRestaurant(restaurantRepository.findById(id)
+                                    .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id)));
                     mealRepository.save(mealEntity);
                     return mealEntity;
                 })
                 .collect(Collectors.toList());
 
-        RestaurantEntity restaurant = restaurantRepository.getById(id)
+        RestaurantEntity restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id))
                 .setMeals(mealEntities);
 
         restaurantRepository.save(restaurant);

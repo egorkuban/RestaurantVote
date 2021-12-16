@@ -1,25 +1,32 @@
 package com.egorkuban.restaurantvote.controller;
 
+import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
+import com.egorkuban.restaurantvote.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rest")
 public class UserController {
-//    private final UserService userService;
+    private final UserService userService;
 
-//    //
-//    //Юзер отправляет запрос - Ответ: список ресторанов
-//    //проверки в отдельный метод потом уберу
-//    @GetMapping("/restaurants")
-//    public ResponseEntity<List<RestaurantEntity>> getAllRestaurants() {
-//        final List<RestaurantEntity> allRestaurantsWithMeals = userService.getAllRestaurants();
-//        return allRestaurantsWithMeals != null && !allRestaurantsWithMeals.isEmpty()
-//                ? new ResponseEntity<>(allRestaurantsWithMeals, HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
+    //
+    //Юзер отправляет запрос - Ответ: список ресторанов
+    //проверки в отдельный метод потом уберу
+    @GetMapping("/restaurants")
+    public ResponseEntity<List<RestaurantEntity>> getAllRestaurants() {
+        final List<RestaurantEntity> allRestaurantsWithMeals = userService.getAllRestaurants();
+        return allRestaurantsWithMeals != null && !allRestaurantsWithMeals.isEmpty()
+                ? new ResponseEntity<>(allRestaurantsWithMeals, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
 //    //Юзер отправляет Id ресторана - Ответ: id ресторана + дата
 //    @PostMapping("/restaurants/{id}/vote")
