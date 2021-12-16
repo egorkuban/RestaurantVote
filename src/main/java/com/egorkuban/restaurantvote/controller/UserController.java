@@ -17,16 +17,16 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    //
-    //Юзер отправляет запрос - Ответ: список ресторанов
-    //проверки в отдельный метод потом уберу
-    @GetMapping("/restaurants")
-    public ResponseEntity<List<RestaurantEntity>> getAllRestaurants() {
-        final List<RestaurantEntity> allRestaurantsWithMeals = userService.getAllRestaurants();
-        return allRestaurantsWithMeals != null && !allRestaurantsWithMeals.isEmpty()
-                ? new ResponseEntity<>(allRestaurantsWithMeals, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+//    //
+//    //Юзер отправляет запрос - Ответ: список ресторанов
+//    //проверки в отдельный метод потом уберу
+//    @GetMapping("/restaurants")
+//    public ResponseEntity<List<RestaurantEntity>> getAllRestaurants() {
+//        final List<RestaurantEntity> allRestaurantsWithMeals = userService.getAllRestaurants();
+//        return allRestaurantsWithMeals != null && !allRestaurantsWithMeals.isEmpty()
+//                ? new ResponseEntity<>(allRestaurantsWithMeals, HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
 
 //    //Юзер отправляет Id ресторана - Ответ: id ресторана + дата
 //    @PostMapping("/restaurants/{id}/vote")
