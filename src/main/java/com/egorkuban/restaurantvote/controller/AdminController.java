@@ -1,15 +1,14 @@
 package com.egorkuban.restaurantvote.controller;
 
+import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
+import com.egorkuban.restaurantvote.model.response.CreatMealResponse;
 import com.egorkuban.restaurantvote.model.response.CreateRestaurantResponse;
 import com.egorkuban.restaurantvote.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,16 +24,17 @@ public class AdminController {
         return new ResponseEntity<>(adminService.createRestaurant(request), HttpStatus.CREATED);
     }
 
-//    //Админ отправляет id ресторана - Ответ: id + статус
-//    @PostMapping("/restaurants/{id}/delete")
-//    public ResponseEntity<Long> deleteRestaurant(@PathVariable Long id) {
-//        return new ResponseEntity<>(adminService.deleteRestaurant(id), HttpStatus.OK);
-//    }
+    //Админ отправляет id ресторана - Ответ: id + статус
+    @PostMapping("/restaurants/{id}/delete")
+    public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
+        adminService.deleteRestaurant(id);
+        return new ResponseEntity<>("Restaurant with id = " + id + " removed", HttpStatus.OK);
+    }
 
-//    //Админ отправляет Список еды + id ресторана - Ответ: Ресторан + список еды
-//    @PostMapping("/restaurants/{id}/meals")
-//    public ResponseEntity<CreatMealResponse> createMeals(@RequestBody CreateMealRequest request, @PathVariable Long id) {
-//        return new ResponseEntity<>(adminService.createMeals(request, id), HttpStatus.CREATED);
-//    }
+    //Админ отправляет Список еды + id ресторана - Ответ: Ресторан + список еды
+    @PostMapping("/restaurants/{id}/meals")
+    public ResponseEntity<CreatMealResponse> createMeals(@RequestBody CreateMealRequest request, @PathVariable Long id) {
+        return new ResponseEntity<>(adminService.createMeals(request, id), HttpStatus.CREATED);
+    }
 
 }
