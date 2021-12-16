@@ -43,6 +43,8 @@ public class AdminService {
 
     @Transactional
     public void deleteRestaurant(Long id) {
+        restaurantRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
         restaurantRepository.deleteById(id);
     }
 

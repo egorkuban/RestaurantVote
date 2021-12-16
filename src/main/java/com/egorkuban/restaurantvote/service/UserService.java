@@ -20,7 +20,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     public List<RestaurantEntity> getAllRestaurants() {
-        return restaurantRepository.findAll();
+        return restaurantRepository
+                .findAll()
+                .stream().toList();
     }
 
     public VoteResponse vote(Long id) {
@@ -29,6 +31,7 @@ public class UserService {
                 .setRestaurant(restaurantRepository.findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id)))
                 .setUserEntity(null);
+        voteRepository.save(vote);
         return new VoteResponse()
                 .setRestaurantId(restaurantRepository.findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id))
