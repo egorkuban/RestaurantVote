@@ -2,6 +2,7 @@ package com.egorkuban.restaurantvote.jpa.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(schema = "PUBLIC", name = "VOTE")
 @Getter
 @Setter
+@Accessors(chain = true)
 public class VoteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rest")
 public class UserController {
 //    private final UserService userService;
-//
+
 //    //
 //    //Юзер отправляет запрос - Ответ: список ресторанов
 //    //проверки в отдельный метод потом уберу

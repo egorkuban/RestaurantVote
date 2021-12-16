@@ -20,20 +20,19 @@ public class AdminService {
 
     @Transactional
     public CreateRestaurantResponse createRestaurant(CreateRestaurantRequest request) {
-        RestaurantEntity restaurant = new RestaurantEntity();
-        restaurant.setName(request.getName());
-        restaurant.setAddress(request.getAddress());
+        RestaurantEntity restaurant = new RestaurantEntity()
+                .setName(request.getName())
+                .setAddress(request.getAddress());
         restaurantRepository.save(restaurant);
 
-        RestaurantDto restaurantDto = new RestaurantDto();
-        restaurantDto.setName(request.getName());
-        restaurantDto.setAddress(request.getAddress());
-        restaurantDto.setId(restaurant.getId());
+        RestaurantDto restaurantDto = new RestaurantDto()
+                .setName(restaurant.getName())
+                .setAddress(restaurant.getAddress())
+                .setId(restaurant.getId());
 
-        CreateRestaurantResponse restaurantResponse = new CreateRestaurantResponse();
-        restaurantResponse.setRestaurantDto(restaurantDto);
-
-
-        return restaurantResponse;
+        return new CreateRestaurantResponse()
+                .setRestaurantDto(restaurantDto);
     }
+
+
 }
