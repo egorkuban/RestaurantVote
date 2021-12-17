@@ -4,7 +4,7 @@ import com.egorkuban.restaurantvote.jpa.entity.MealEntity;
 import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
 import com.egorkuban.restaurantvote.jpa.repository.MealRepository;
 import com.egorkuban.restaurantvote.jpa.repository.RestaurantRepository;
-import com.egorkuban.restaurantvote.model.MealDto;
+import com.egorkuban.restaurantvote.mapper.RestaurantMapper;
 import com.egorkuban.restaurantvote.model.RestaurantDto;
 import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
@@ -23,6 +23,7 @@ public class AdminService {
 
     private final RestaurantRepository restaurantRepository;
     private final MealRepository mealRepository;
+    private final RestaurantMapper mapper;
 
 
     @Transactional
@@ -50,41 +51,25 @@ public class AdminService {
 
     @Transactional
     public CreatMealResponse createMeals(CreateMealRequest request, Long id) {
-        List<MealEntity> mealEntities = request.getMeals().stream()
-                .map(mealRequest -> {
-                    MealEntity mealEntity = new MealEntity()
-                            .setName(mealRequest.getName())
-                            .setPrice(mealRequest.getPrice())
-                            .setAddTime(mealRequest.getAddTime())
-                            .setRestaurant(restaurantRepository.findById(id)
-                                    .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id)));
-                    mealRepository.save(mealEntity);
-                    return mealEntity;
-                })
-                .collect(Collectors.toList());
-
         RestaurantEntity restaurant = restaurantRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id))
-                .setMeals(mealEntities);
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
 
-        restaurantRepository.save(restaurant);
-
-        List<MealDto> meals = request.getMeals().stream()
-                .map(mealDto -> new MealDto()
-                        .setName(mealDto.getName())
-                        .setPrice(mealDto.getPrice())
-                        .setAddTime(mealDto.getAddTime())
+        List<MealEntity> mealEntities = request.getMeals().stream()
+                .map(mealRequest -> new MealEntity()
+                        .setName(mealRequest.getName())
+                        .setPrice(mealRequest.getPrice())
+                        .setRestaurant(restaurant)
                 )
                 .collect(Collectors.toList());
 
-        RestaurantDto restaurantDto = new RestaurantDto()
-                .setName(restaurant.getName())
-                .setAddress(restaurant.getAddress())
-                .setId(restaurant.getId())
-                .setMeals(meals);
+        mealRepository.deleteAllByRestaurantId(restaurant.getId());
+        mealRepository.saveAll(mealEntities);
+
+        restaurantRepository.getById(id).setMeals(mealEntities);
+        restaurantRepository.save(restaurant);
 
         return new CreatMealResponse()
-                .setRestaurantDto(restaurantDto);
+                .setRestaurantDto(mapper.mapToRestaurantDto(restaurant));
     }
 
 }

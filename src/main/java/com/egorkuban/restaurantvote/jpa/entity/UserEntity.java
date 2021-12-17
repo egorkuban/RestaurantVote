@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(schema = "PUBLIC", name = "USERS")
+@Table(schema = "public", name = "users")
 @Getter
 @Setter
 public class UserEntity {

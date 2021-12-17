@@ -1,7 +1,6 @@
 package com.egorkuban.restaurantvote.controller;
 
-import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
-import com.egorkuban.restaurantvote.model.response.VoteResponse;
+import com.egorkuban.restaurantvote.model.RestaurantDto;
 import com.egorkuban.restaurantvote.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,8 @@ public class UserController {
 
     //Юзер отправляет запрос - Ответ: список ресторанов
     @GetMapping("/restaurants")
-    public ResponseEntity<List<RestaurantEntity>> getAllRestaurants() {
-        final List<RestaurantEntity> allRestaurantsWithMeals = userService.getAllRestaurants();
+    public ResponseEntity<List<RestaurantDto>> getAllRestaurants() {
+        final List<RestaurantDto> allRestaurantsWithMeals = userService.getAllRestaurants();
         return allRestaurantsWithMeals != null && !allRestaurantsWithMeals.isEmpty()
                 ? new ResponseEntity<>(allRestaurantsWithMeals, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -29,13 +28,15 @@ public class UserController {
 
     //Юзер отправляет Id ресторана - Ответ: id ресторана + дата
     @PostMapping("/restaurants/{id}/vote")
-    public ResponseEntity<VoteResponse> vote(@PathVariable Long id) {
+    public ResponseEntity<String> vote(@PathVariable Long id) {
         LocalDateTime localDateTime = LocalDateTime.now();
         LocalDateTime dateTimeVote = LocalDateTime.of(LocalDate.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(),
-                10, 59, 59);
-        return localDateTime.isBefore(dateTimeVote)
-                ? new ResponseEntity<>(userService.vote(id), HttpStatus.ACCEPTED)
-                : new ResponseEntity<>(userService.vote(id), HttpStatus.FORBIDDEN);
-
+                20, 59, 59);
+        if (localDateTime.isBefore(dateTimeVote)) {
+            userService.vote(id);
+            return new ResponseEntity<>("Your vote has been counted for the restaurant :" + id, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("Sorry, your vote is not counted, voting time is over", HttpStatus.FORBIDDEN);
+        }
     }
 }

@@ -1,0 +1,10 @@
+DELETE FROM user_roles;
+DELETE FROM users;
+
+INSERT INTO users (id, name) VALUES (1,user);
+
+INSERT INTO user_roles(role)
+VALUES ('USER');
+
+
+

@@ -1,0 +1,54 @@
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS vote;
+DROP TABLE IF EXISTS meals;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS restaurant;
+
+
+
+CREATE TABLE restaurant
+(
+    id      BIGSERIAL PRIMARY KEY NOT NULL,
+    name    VARCHAR(255)          NOT NULL,
+    address VARCHAR(255)          NOT NULL
+);
+CREATE UNIQUE INDEX restaurant_unique_index on restaurant (name, address);
+
+CREATE TABLE meals
+(
+    id            BIGSERIAL PRIMARY KEY NOT NULL,
+    name          VARCHAR(255)          NOT NULL,
+    price         DECIMAL               NOT NULL,
+    restaurant_id BIGSERIAL             NOT NULL,
+
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
+);
+
+CREATE TABLE users
+(
+    id   BIGSERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(255)          NOT NULL
+);
+CREATE UNIQUE INDEX user_unique_index on users (name);
+
+CREATE TABLE user_roles
+(
+    user_id BIGSERIAL NOT NULL,
+    role    VARCHAR(255),
+    CONSTRAINT user_roles_idx UNIQUE (user_id, role),
+    FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE
+
+);
+
+CREATE TABLE vote
+(
+    id            BIGSERIAL PRIMARY KEY   NOT NULL,
+    restaurant_id BIGSERIAL               NOT NULL,
+    user_id       BIGSERIAL               NOT NULL,
+    date_vote     TIMESTAMP DEFAULT now() NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
+
+)
+
+

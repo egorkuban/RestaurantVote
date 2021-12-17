@@ -8,10 +8,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "PUBLIC", name = "MEALS")
+@Table(schema = "public", name = "meals")
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -25,8 +24,6 @@ public class MealEntity {
 
     @Column(name = "price")
     private BigDecimal price;
-
-    private LocalDateTime addTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
