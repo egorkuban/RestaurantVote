@@ -30,20 +30,8 @@ public class UserService {
     }
 
     @Transactional
-    public void vote(Long id) {
-        LocalDate localDate = LocalDate.now();
-        Long userId = 1L;
+    public void vote(Long id, Long userId) {
 
-        VoteEntity vote = new VoteEntity()
-                .setUserEntity(userRepository.getById(1L))
-                .setRestaurant(restaurantRepository.findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id)))
-                .setVoteDate(LocalDate.now());
-        List<VoteEntity> voteEntities = voteRepository.findAllByVoteDateAndUserEntityId(localDate, userId);
-        if (!voteEntities.isEmpty()) {
-            voteRepository.deleteVoteEntityByVoteDateAndUserEntityId(localDate, userId);
-        }
-        voteRepository.save(vote);
     }
 
 }

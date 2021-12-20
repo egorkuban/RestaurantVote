@@ -25,8 +25,7 @@ public class RestaurantEntity {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(mappedBy = "restaurant")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "restaurant", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<MealEntity> meals;
 
 }

@@ -33,7 +33,7 @@ public class UserController {
         LocalDateTime dateTimeVote = LocalDateTime.of(LocalDate.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(),
                 20, 59, 59);
         if (localDateTime.isBefore(dateTimeVote)) {
-            userService.vote(id);
+            userService.vote(id,1L);
             return new ResponseEntity<>("Your vote has been counted for the restaurant :" + id, HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Sorry, your vote is not counted, voting time is over", HttpStatus.FORBIDDEN);
