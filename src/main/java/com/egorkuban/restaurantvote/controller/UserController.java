@@ -1,6 +1,7 @@
 package com.egorkuban.restaurantvote.controller;
 
 import com.egorkuban.restaurantvote.model.RestaurantDto;
+import com.egorkuban.restaurantvote.model.response.VoteResponse;
 import com.egorkuban.restaurantvote.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,15 +29,7 @@ public class UserController {
 
     //Юзер отправляет Id ресторана - Ответ: id ресторана + дата
     @PostMapping("/restaurants/{id}/vote")
-    public ResponseEntity<String> vote(@PathVariable Long id) {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        LocalDateTime dateTimeVote = LocalDateTime.of(LocalDate.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(),
-                20, 59, 59);
-        if (localDateTime.isBefore(dateTimeVote)) {
-            userService.vote(id,1L);
-            return new ResponseEntity<>("Your vote has been counted for the restaurant :" + id, HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>("Sorry, your vote is not counted, voting time is over", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<VoteResponse> vote(@PathVariable Long id) {
+       return new ResponseEntity<VoteResponse>(userService.vote(id,1L),HttpStatus.ACCEPTED);
     }
 }

@@ -8,8 +8,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface VoteRepository extends JpaRepository<VoteEntity, Long> {
-    List<VoteEntity> findAllByVoteDateAndUserEntityId(LocalDate voteDate, Long userEntity_id);
-
-    void deleteVoteEntityByVoteDateAndUserEntityId(LocalDate voteDate, Long userEntity_id);
-
+    VoteEntity findByVoteDateAndUserEntityId(LocalDate voteDate, Long userEntity_id);
 }
