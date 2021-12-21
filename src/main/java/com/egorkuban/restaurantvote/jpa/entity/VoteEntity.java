@@ -26,7 +26,7 @@ public class VoteEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    private UserEntity user;
     @Column(name = "date_vote")
     private LocalDate voteDate;
 }

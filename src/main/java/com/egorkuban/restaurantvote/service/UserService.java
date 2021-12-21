@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final static LocalTime TIME_EXPIRED_BORDER = LocalTime.of(11, 0);
     private final RestaurantRepository restaurantRepository;
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
@@ -33,31 +33,32 @@ public class UserService {
     }
 
     @Transactional
-    public VoteResponse vote(Long id, Long userId) {
-        LocalDateTime timeVote = LocalDateTime.now();
-        VoteEntity vote = voteRepository.findByVoteDateAndUserEntityId(timeVote.toLocalDate(), userId);
-        if (timeVote.isBefore(LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 59, 59)))) {
-            if (vote != null) {
-                vote.setRestaurant(restaurantRepository.getById(id));
-            } else {
-                vote = new VoteEntity()
-                        .setUserEntity(userRepository.getById(userId))
-                        .setRestaurant(restaurantRepository.getById(id))
-                        .setVoteDate(timeVote.toLocalDate());
-            }
-            voteRepository.save(vote);
-        } else if (timeVote.isAfter(LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 59, 59)))) {
-            if (vote == null) {
-                vote = new VoteEntity()
-                        .setUserEntity(userRepository.getById(userId))
-                        .setRestaurant(restaurantRepository.getById(id))
-                        .setVoteDate(timeVote.toLocalDate());
-                voteRepository.save(vote);
-            }
-        }
+    public VoteResponse vote(Long restaurantId, Long userId) {
+        VoteEntity resultVote = voteRepository.findByVoteDateAndUserEntityId(LocalDate.now(), userId)
+                .map(voteEntity -> changeVote(voteEntity, restaurantId))
+                .orElse(createVote(restaurantId, userId));
+        voteRepository.save(resultVote);
+
         return new VoteResponse()
-                .setRestaurantId(vote.getRestaurant().getId())
-                .setVoteDate(vote.getVoteDate());
+                .setRestaurantId(restaurantId)
+                .setVoteDate(resultVote.getVoteDate());
     }
 
+    private VoteEntity changeVote(VoteEntity voteEntity, Long restaurantId) {
+        if (isTimeExpired()) {
+            throw new IllegalArgumentException("Current time is after " + TIME_EXPIRED_BORDER + ". You can't vote once more yet");
+        }
+        return voteEntity.setRestaurant(restaurantRepository.getById(restaurantId));
+    }
+
+    private VoteEntity createVote(Long restaurantId, Long userId) {
+        return new VoteEntity()
+                .setRestaurant(restaurantRepository.getById(restaurantId))
+                .setUser(userRepository.getById(userId))
+                .setVoteDate(LocalDate.now());
+    }
+
+    private boolean isTimeExpired() {
+        return !LocalTime.now().isBefore(TIME_EXPIRED_BORDER);
+    }
 }
