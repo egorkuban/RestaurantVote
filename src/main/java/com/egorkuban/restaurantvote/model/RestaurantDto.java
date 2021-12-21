@@ -15,12 +15,4 @@ public class RestaurantDto {
     private String address;
     List<MealDto> meals;
 
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "name='" + name + '\'' +
-                ", address=" + address +
-                ", id=" + id +
-                '}';
-    }
 }

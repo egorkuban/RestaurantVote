@@ -34,7 +34,7 @@ public class UserService {
 
     @Transactional
     public VoteResponse vote(Long restaurantId, Long userId) {
-        VoteEntity resultVote = voteRepository.findByVoteDateAndUserEntityId(LocalDate.now(), userId)
+        VoteEntity resultVote = voteRepository.findByVoteDateAndUserId(LocalDate.now(), userId)
                 .map(voteEntity -> changeVote(voteEntity, restaurantId))
                 .orElse(createVote(restaurantId, userId));
         voteRepository.save(resultVote);
