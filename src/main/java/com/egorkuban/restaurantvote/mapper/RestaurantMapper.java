@@ -20,10 +20,10 @@ public class RestaurantMapper {
                 .setId(entity.getId())
                 .setName(entity.getName())
                 .setAddress(entity.getAddress())
-                .setMeals(mapToMeals(entity));
+                .setMeals(mapToMealsDto(entity));
     }
 
-    private List<MealDto> mapToMeals(RestaurantEntity entity) {
+    private List<MealDto> mapToMealsDto(RestaurantEntity entity) {
         List<MealDto> meals = null;
         if (!entity.getMeals().isEmpty()) {
             meals = entity.getMeals().stream().

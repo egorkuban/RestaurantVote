@@ -25,9 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final RestaurantMapper mapper;
 
-
     public List<RestaurantDto> getAllRestaurants() {
-        return restaurantRepository.findAll().stream()
+        return restaurantRepository.getAllRestaurants().stream()
                 .map(mapper::mapToRestaurantDto)
                 .collect(Collectors.toList());
     }

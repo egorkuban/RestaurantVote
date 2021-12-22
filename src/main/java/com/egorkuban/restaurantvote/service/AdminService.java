@@ -47,7 +47,7 @@ public class AdminService {
         RestaurantEntity restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
 
-        List<MealEntity> mealEntities = mealMapper.mapToMealsEntity(request);
+        List<MealEntity> mealEntities = mealMapper.mapToMealsEntity(request.getMeals());
         restaurant.getMeals().clear();
         mealEntities.forEach(e -> e.setRestaurant(restaurant));
         restaurant.getMeals().addAll(mealEntities);

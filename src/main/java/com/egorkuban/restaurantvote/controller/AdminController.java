@@ -12,26 +12,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/rest")
+@RequestMapping("/api/v1/admin")
 public class AdminController {
 
     private final AdminService adminService;
 
-    ///Админ отправляет Имя + Адрес - Ответ Ресторан : Id, имя, адрес
     @PostMapping("/create")
     public ResponseEntity<CreateRestaurantResponse> createRestaurant(@RequestBody CreateRestaurantRequest request) {
 
         return new ResponseEntity<>(adminService.createRestaurant(request), HttpStatus.CREATED);
     }
 
-    //Админ отправляет id ресторана - Ответ: id + статус
     @PostMapping("/restaurants/{id}/delete")
     public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
         adminService.deleteRestaurant(id);
         return new ResponseEntity<>("Restaurant with id = " + id + " removed", HttpStatus.OK);
     }
 
-    //Админ отправляет Список еды + id ресторана - Ответ: Ресторан + список еды
     @PostMapping("/restaurants/{id}/meals")
     public ResponseEntity<CreatMealResponse> createMeals(@RequestBody CreateMealRequest request, @PathVariable Long id) {
         return new ResponseEntity<>(adminService.createMeals(request, id), HttpStatus.CREATED);

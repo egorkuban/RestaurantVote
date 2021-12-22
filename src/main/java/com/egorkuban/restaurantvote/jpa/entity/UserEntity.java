@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Set;
 
 @Entity
@@ -15,13 +16,16 @@ import java.util.Set;
 @Setter
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "01")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "email")
+    @Email
+    private String email;
+    @Column(name = "password")
+    private String password;
 
-    @Enumerated(EnumType.STRING) //Понял данную аннотацию и для чего она здесь.
+    @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
