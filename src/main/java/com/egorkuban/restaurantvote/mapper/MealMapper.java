@@ -15,11 +15,12 @@ import java.util.stream.Collectors;
 @Configuration
 public class MealMapper {
     public List<MealEntity> mapToMealsEntity(List<MealDto> meals) {
-        return !(meals == null)
-                ? meals.stream()
+        if (meals == null) {
+            return Collections.emptyList();
+        }
+        return meals.stream()
                 .map(this::mapToMealEntity)
-                .collect(Collectors.toList())
-                : Collections.emptyList();
+                .collect(Collectors.toList());
     }
     private MealEntity mapToMealEntity (MealDto mealDto){
         return new MealEntity()

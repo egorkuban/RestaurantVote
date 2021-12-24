@@ -1,13 +1,17 @@
-DELETE FROM user_roles;
-DELETE FROM users;
+DELETE
+FROM user_roles;
+DELETE
+FROM users;
 
-INSERT INTO users (email,password)
-VALUES ('user@user.com','user'),
-       ('admin@admin.com','admin');
+INSERT INTO users (email, password)
+VALUES ('user@user.com', 'user'),
+       ('admin@admin.com', 'admin');
 
-INSERT INTO user_roles(role)
-VALUES ('USER'),
-       ('ADMIN');
+
+INSERT INTO user_roles(user_id, role)
+VALUES (1, 'USER'),
+       (2, 'ADMIN'),
+       (2, 'USER');
 
 
 

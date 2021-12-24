@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
 
@@ -27,6 +27,7 @@ public class UserController {
 
     @PostMapping("/restaurants/{id}/vote")
     public ResponseEntity<VoteResponse> vote(@PathVariable Long id) {
-       return new ResponseEntity<>(userService.vote(id,1L),HttpStatus.ACCEPTED);
+       return new ResponseEntity<>(userService.vote(id,userService.getId()),HttpStatus.ACCEPTED);
     }
+
 }

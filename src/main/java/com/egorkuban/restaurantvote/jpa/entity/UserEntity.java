@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Set;
 
 @Entity
@@ -16,11 +15,10 @@ import java.util.Set;
 @Setter
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "01")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "email")
-    @Email
     private String email;
     @Column(name = "password")
     private String password;

@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserRepository userRepository;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    protected PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
@@ -33,9 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/admin/**").hasRole(Role.ADMIN.name())
-                .antMatchers("/api/v1/**")
-                .authenticated()
+                .antMatchers( "/api/v1/admin/**").hasAuthority(Role.ADMIN.getAuthority())
+                .antMatchers("/api/v1/user/**").hasAuthority(Role.USER.getAuthority())
                 .anyRequest()
                 .authenticated();
         http.httpBasic();
@@ -45,8 +44,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected UserDetailsService userDetailsService() {
         return email -> {
             UserEntity user = userRepository.findByEmail(email)
-                    .orElseThrow(()->new UsernameNotFoundException("User with email " + email + " not found"));
-            return new User(user.getEmail(),user.getPassword(),user.getRoles());
+                    .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
+            return (User) User.builder()
+                     .username(user.getEmail())
+                     .password(passwordEncoder().encode(user.getPassword()))
+                     .authorities(user.getRoles())
+                     .build();
         };
     }
 }

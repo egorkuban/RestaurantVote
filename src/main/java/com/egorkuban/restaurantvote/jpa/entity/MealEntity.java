@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class MealEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "01")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")

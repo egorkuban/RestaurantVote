@@ -1,5 +1,6 @@
 package com.egorkuban.restaurantvote.mapper;
 
+import com.egorkuban.restaurantvote.jpa.entity.MealEntity;
 import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
 import com.egorkuban.restaurantvote.model.MealDto;
 import com.egorkuban.restaurantvote.model.RestaurantDto;
@@ -16,23 +17,24 @@ import java.util.stream.Collectors;
 public class RestaurantMapper {
 
     public RestaurantDto mapToRestaurantDto(RestaurantEntity entity) {
-        return new RestaurantDto()
+        RestaurantDto restaurantDto = new RestaurantDto()
                 .setId(entity.getId())
                 .setName(entity.getName())
                 .setAddress(entity.getAddress())
-                .setMeals(mapToMealsDto(entity));
+                .setMeals(mapToMealsDto(entity.getMeals()));
+        return restaurantDto;
+
     }
 
-    private List<MealDto> mapToMealsDto(RestaurantEntity entity) {
-        List<MealDto> meals = null;
-        if (!entity.getMeals().isEmpty()) {
-            meals = entity.getMeals().stream().
-                    map(meal -> new MealDto()
-                            .setName(meal.getName())
-                            .setPrice(meal.getPrice()))
-                    .collect(Collectors.toList());
+    private List<MealDto> mapToMealsDto(List<MealEntity> meals) {
+        if (meals == null) {
+            return null;
         }
-        return meals;
+        return meals.stream()
+                .map(meal -> new MealDto()
+                        .setName(meal.getName())
+                        .setPrice(meal.getPrice()))
+                .collect(Collectors.toList());
 
     }
 }
