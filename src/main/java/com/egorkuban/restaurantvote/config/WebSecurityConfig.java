@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return email -> {
             UserEntity user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
-            return (User) User.builder()
+            return User.builder()
                      .username(user.getEmail())
                      .password(passwordEncoder().encode(user.getPassword()))
                      .authorities(user.getRoles())

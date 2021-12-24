@@ -10,12 +10,4 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class CreateRestaurantResponse {
     RestaurantDto restaurantDto;
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "name='" + restaurantDto.getName() + '\'' +
-                ", address=" + restaurantDto.getAddress() +
-                ", id=" + restaurantDto.getId() +
-                '}';
-    }
 }
