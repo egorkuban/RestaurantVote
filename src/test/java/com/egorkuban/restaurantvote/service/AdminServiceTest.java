@@ -17,8 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -66,9 +65,10 @@ class AdminServiceTest {
     void deleteRestaurantTest() {
         RestaurantEntity entity = new RestaurantEntity()
                 .setId(1L);
-        when(restaurantRepository.findById(entity.getId())).thenReturn(Optional.of(entity)).thenReturn(Optional.empty());
-        adminService.deleteRestaurant(1L);
+        when(restaurantRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        adminService.deleteRestaurant(entity.getId());
         verify(restaurantRepository, times(1)).delete(any(RestaurantEntity.class));
+        when(restaurantRepository.findById(entity.getId())).thenReturn(Optional.empty());
     }
 
     @Test
