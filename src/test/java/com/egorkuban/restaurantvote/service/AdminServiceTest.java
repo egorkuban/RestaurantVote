@@ -1,5 +1,6 @@
 package com.egorkuban.restaurantvote.service;
 
+import com.egorkuban.restaurantvote.jpa.entity.MealEntity;
 import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
 import com.egorkuban.restaurantvote.jpa.repository.RestaurantRepository;
 import com.egorkuban.restaurantvote.mapper.MealMapper;
@@ -14,10 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -63,42 +66,50 @@ class AdminServiceTest {
 
     @Test
     void deleteRestaurantTest() {
-        RestaurantEntity entity = new RestaurantEntity()
+        RestaurantEntity restaurant = new RestaurantEntity()
                 .setId(1L);
-        when(restaurantRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        adminService.deleteRestaurant(entity.getId());
-        verify(restaurantRepository, times(1)).delete(any(RestaurantEntity.class));
-        when(restaurantRepository.findById(entity.getId())).thenReturn(Optional.empty());
+        when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
+        adminService.deleteRestaurant(eq(1L));
+        verify(restaurantRepository, times(1)).delete(eq(restaurant));
     }
 
     @Test
     void createMealsTest() {
-        List<MealDto> meals = List.of(
+        List<MealDto> meals = new ArrayList<>(Arrays.asList(
                 new MealDto()
                         .setName("MealName1")
                         .setPrice(BigDecimal.valueOf(100)),
                 new MealDto()
                         .setName("MealName1")
                         .setPrice(BigDecimal.valueOf(150))
-        );
+        ));
+
         CreateMealRequest request = new CreateMealRequest();
         request.setMeals(meals);
 
-        RestaurantEntity entity = new RestaurantEntity()
+        RestaurantEntity restaurant = new RestaurantEntity()
                 .setId(1L)
                 .setName("restaurant_1")
-                .setAddress("address_1")
-                .setMeals(mealMapper.mapToMealsEntity(request.getMeals()));
+                .setAddress("address_1");
+        List<MealEntity> meal = new ArrayList<>(Arrays.asList(
+                new MealEntity()
+                        .setName("name")
+                        .setPrice(BigDecimal.valueOf(20))
+                        .setId(1L)
+                        .setRestaurant(restaurant)
+        ));
+        restaurant.setMeals(meal);
 
-        when(restaurantRepository.findById(entity.getId())).thenReturn(Optional.of(entity)).thenReturn(Optional.empty());
+        when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
 
 
-        CreatMealResponse response = adminService.createMeals(request, entity.getId());
-        verify(restaurantRepository, times(1)).save(any(RestaurantEntity.class));
+        CreatMealResponse response = adminService.createMeals(request, restaurant.getId());
+
+        verify(restaurantRepository, times(1)).save(eq(restaurant));
         assertEquals(response.getRestaurantDto().getId(), 1L);
         assertEquals(response.getRestaurantDto().getName(), "restaurant_1");
         assertEquals(response.getRestaurantDto().getAddress(), "address_1");
-        assertNotNull(response.getRestaurantDto().getMeals());
+        assertEquals(response.getRestaurantDto().getMeals().get(1),eq(meals.get(1)));
 
 
     }
