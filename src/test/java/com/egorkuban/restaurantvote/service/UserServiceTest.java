@@ -63,7 +63,7 @@ class UserServiceTest {
         when(voteRepository.findByVoteDateAndUserId(LocalDate.now(), 1L)).thenReturn(Optional.of(vote));
         if (LocalTime.now().isAfter(TIME_EXPIRED_BORDER)) {
             assertThrows(IllegalArgumentException.class, () -> {
-                VoteResponse response = userService.vote(vote.getRestaurant().getId(), vote.getUser().getId());
+                userService.vote(vote.getRestaurant().getId(), vote.getUser().getId());
             });
         } else {
             VoteResponse response = userService.vote(vote.getRestaurant().getId(), vote.getUser().getId());
@@ -71,8 +71,5 @@ class UserServiceTest {
             assertEquals(response.getVoteDate(), LocalDate.now());
             verify(voteRepository, times(1)).save(eq(vote));
         }
-
-
     }
-
 }
