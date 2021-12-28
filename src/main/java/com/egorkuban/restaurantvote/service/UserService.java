@@ -61,7 +61,7 @@ public class UserService {
                 .setVoteDate(LocalDate.now());
     }
 
-    private boolean isTimeExpired() {
+    protected boolean isTimeExpired() {
         return !LocalTime.now().isBefore(TIME_EXPIRED_BORDER);
     }
 

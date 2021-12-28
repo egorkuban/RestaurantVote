@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +21,6 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 class UserServiceTest {
-    final static LocalTime TIME_EXPIRED_BORDER = LocalTime.of(11, 0);
     UserService userService;
     RestaurantRepository restaurantRepository;
     VoteRepository voteRepository;
@@ -37,7 +35,7 @@ class UserServiceTest {
         restaurantRepository = mock(RestaurantRepository.class);
         voteRepository = mock(VoteRepository.class);
         userRepository = mock(UserRepository.class);
-        userService = new UserService(restaurantRepository, voteRepository, userRepository, restaurantMapper);
+        userService = spy(new UserService(restaurantRepository, voteRepository, userRepository, restaurantMapper));
     }
 
     @Test
@@ -48,28 +46,67 @@ class UserServiceTest {
     @Test
     void voteTest() {
 
-        RestaurantEntity restaurant = new RestaurantEntity()
+        RestaurantEntity oldVoteRestaurant = new RestaurantEntity()
                 .setName("Name_Restaurant")
                 .setId(1L);
+
         UserEntity user = new UserEntity();
         user.setEmail("Example@email.com");
         user.setId(1L);
 
         VoteEntity vote = new VoteEntity();
         vote.setVoteDate(LocalDate.now());
-        vote.setRestaurant(restaurant);
+        vote.setRestaurant(oldVoteRestaurant);
         vote.setUser(user);
 
+        RestaurantEntity newVoteRestaurant = new RestaurantEntity()
+                .setName("New_Restaurant")
+                .setId(2L);
+
         when(voteRepository.findByVoteDateAndUserId(LocalDate.now(), 1L)).thenReturn(Optional.of(vote));
-        if (LocalTime.now().isAfter(TIME_EXPIRED_BORDER)) {
-            assertThrows(IllegalArgumentException.class, () -> {
-                userService.vote(vote.getRestaurant().getId(), vote.getUser().getId());
-            });
-        } else {
-            VoteResponse response = userService.vote(vote.getRestaurant().getId(), vote.getUser().getId());
-            assertEquals(response.getRestaurantId(), 1L);
-            assertEquals(response.getVoteDate(), LocalDate.now());
-            verify(voteRepository, times(1)).save(eq(vote));
-        }
+        when(restaurantRepository.getById(eq(2L))).thenReturn(newVoteRestaurant);
+        when(userService.isTimeExpired()).thenReturn(false);
+
+        VoteResponse response = userService.vote(2L, 1L);
+        assertEquals(response.getRestaurantId(), 2L);
+
     }
+
+    @Test
+    void voteTestFailed() {
+        RestaurantEntity oldVoteRestaurant = new RestaurantEntity()
+                .setName("Name_Restaurant")
+                .setId(1L);
+
+        UserEntity user = new UserEntity();
+        user.setEmail("Example@email.com");
+        user.setId(1L);
+
+        VoteEntity vote = new VoteEntity();
+        vote.setVoteDate(LocalDate.now());
+        vote.setRestaurant(oldVoteRestaurant);
+        vote.setUser(user);
+
+        RestaurantEntity newVoteRestaurant = new RestaurantEntity()
+                .setName("New_Restaurant")
+                .setId(2L);
+
+        when(voteRepository.findByVoteDateAndUserId(LocalDate.now(), 1L)).thenReturn(Optional.of(vote));
+        when(restaurantRepository.getById(eq(2L))).thenReturn(newVoteRestaurant);
+        when(userService.isTimeExpired()).thenReturn(true);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.vote(vote.getRestaurant().getId(), vote.getUser().getId());
+        });
+    }
+
+    @Test
+    void voteTestNewVote(){
+
+        when(voteRepository.findByVoteDateAndUserId(LocalDate.now(), 1L)).thenReturn(Optional.empty());
+        VoteResponse response = userService.vote(1L,1L);
+        assertEquals(response.getRestaurantId(),1L);
+
+    }
+
 }

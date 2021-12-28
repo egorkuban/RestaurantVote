@@ -80,7 +80,7 @@ class AdminServiceTest {
                         .setName("MealName1")
                         .setPrice(BigDecimal.valueOf(100)),
                 new MealDto()
-                        .setName("MealName1")
+                        .setName("MealName2")
                         .setPrice(BigDecimal.valueOf(150))
         ));
 
@@ -109,7 +109,8 @@ class AdminServiceTest {
         assertEquals(response.getRestaurantDto().getId(), 1L);
         assertEquals(response.getRestaurantDto().getName(), "restaurant_1");
         assertEquals(response.getRestaurantDto().getAddress(), "address_1");
-        assertEquals(response.getRestaurantDto().getMeals().get(1),eq(meals.get(1)));
+        assertEquals(response.getRestaurantDto().getMeals().size(),2);
+        assertEquals(response.getRestaurantDto().getMeals().get(0),"MealName1");
 
 
     }
