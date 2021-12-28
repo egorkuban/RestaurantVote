@@ -101,11 +101,24 @@ class UserServiceTest {
     }
 
     @Test
-    void voteTestNewVote(){
+    void voteTestNewVote() {
+        UserEntity user = new UserEntity();
+        user.setEmail("Example@email.com");
+        user.setId(1L);
 
-        when(voteRepository.findByVoteDateAndUserId(LocalDate.now(), 1L)).thenReturn(Optional.empty());
-        VoteResponse response = userService.vote(1L,1L);
-        assertEquals(response.getRestaurantId(),1L);
+        RestaurantEntity restaurant = new RestaurantEntity()
+                .setName("Name_Restaurant")
+                .setId(1L);
+
+        when(restaurantRepository.getById(eq(1L))).thenReturn(restaurant);
+        when(userRepository.getById(eq(1L))).thenReturn(user);
+
+        VoteResponse response = userService.vote(1L, 1L);
+
+        verify(voteRepository).save(argThat((VoteEntity vote ) -> vote.getUser().getId() == 1L));
+
+
+        assertEquals(response.getRestaurantId(), 1L);
 
     }
 

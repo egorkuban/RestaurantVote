@@ -1,7 +1,6 @@
 package com.egorkuban.restaurantvote.controller;
 
 import com.egorkuban.restaurantvote.model.RestaurantDto;
-import com.egorkuban.restaurantvote.model.response.VoteResponse;
 import com.egorkuban.restaurantvote.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,8 +25,14 @@ public class UserController {
     }
 
     @PostMapping("/restaurants/{id}/vote")
-    public ResponseEntity<VoteResponse> vote(@PathVariable Long id) {
-       return new ResponseEntity<>(userService.vote(id,userService.getId()),HttpStatus.ACCEPTED);
+    public ResponseEntity<Throwable> vote(@PathVariable Long id) {
+        userService.vote(id, userService.getId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<Throwable> IllegalArgumentException (IllegalArgumentException illegalArgumentException) {
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
 }

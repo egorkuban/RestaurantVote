@@ -47,11 +47,11 @@ public class UserService {
                 .setVoteDate(resultVote.getVoteDate());
     }
 
-    private VoteEntity changeVote(VoteEntity voteEntity, Long restaturantId) {
+    private VoteEntity changeVote(VoteEntity voteEntity, Long restaurantId) {
         if (isTimeExpired()) {
             throw new IllegalArgumentException("Current time is after " + TIME_EXPIRED_BORDER + ". You can't vote once more yet");
         }
-        return voteEntity.setRestaurant(restaurantRepository.getById(restaturantId));
+        return voteEntity.setRestaurant(restaurantRepository.getById(restaurantId));
     }
 
     private VoteEntity createVote(Long restaurantId, Long userId) {
