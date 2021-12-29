@@ -14,5 +14,4 @@ public class RestaurantDto {
     private String name;
     private String address;
     List<MealDto> meals;
-
 }

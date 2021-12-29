@@ -2,18 +2,14 @@ package com.egorkuban.restaurantvote.mapper;
 
 import com.egorkuban.restaurantvote.jpa.entity.MealEntity;
 import com.egorkuban.restaurantvote.model.MealDto;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
-@Setter
 public class MealMapper {
 
-    public final static MealMapper MEAL_INSTANT = new MealMapper();
+    public final static MealMapper INSTANCE = new MealMapper();
 
     public List<MealEntity> mapToMealsEntity(List<MealDto> meals) {
         if (meals == null) {
@@ -39,6 +35,5 @@ public class MealMapper {
                         .setName(meal.getName())
                         .setPrice(meal.getPrice()))
                 .collect(Collectors.toList());
-
     }
 }

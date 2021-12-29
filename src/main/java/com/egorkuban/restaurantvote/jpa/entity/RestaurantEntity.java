@@ -25,5 +25,4 @@ public class RestaurantEntity {
 
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<MealEntity> meals;
-
 }

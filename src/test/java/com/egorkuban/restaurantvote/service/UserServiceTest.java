@@ -100,7 +100,6 @@ class UserServiceTest {
         userService.vote(2L, 1L);
 
         verify(voteRepository).save(argThat((VoteEntity v ) -> v.getUser().getId() == 1L));
-
     }
 
     @Test
@@ -126,9 +125,9 @@ class UserServiceTest {
         when(restaurantRepository.getById(eq(2L))).thenReturn(newVoteRestaurant);
         when(userService.isTimeExpired()).thenReturn(true);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.vote(vote.getRestaurant().getId(), vote.getUser().getId());
-        });
+        assertThrows(IllegalArgumentException.class, () ->
+                userService.vote(vote.getRestaurant().getId(), vote.getUser().getId())
+        );
     }
 
     @Test
@@ -148,5 +147,4 @@ class UserServiceTest {
 
         verify(voteRepository).save(argThat((VoteEntity vote ) -> vote.getUser().getId() == 1L));
     }
-
 }

@@ -30,5 +30,4 @@ public class UserEntity {
     @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
-
 }

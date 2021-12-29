@@ -9,5 +9,4 @@ import java.util.List;
 public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Long> {
     @Query("select distinct r FROM RestaurantEntity r join fetch r.meals")
     List<RestaurantEntity> getAllRestaurants();
-
 }

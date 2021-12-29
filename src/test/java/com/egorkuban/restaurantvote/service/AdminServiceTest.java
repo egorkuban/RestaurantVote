@@ -35,12 +35,10 @@ class AdminServiceTest {
 
     @Test
     void createRestaurantTest() {
-        //prepare data
         CreateRestaurantRequest request = new CreateRestaurantRequest();
         request.setName("restaurant_1");
         request.setAddress("address_1");
 
-        //prepare mocks
         when(restaurantRepository.save(any(RestaurantEntity.class)))
                 .then((Answer<RestaurantEntity>) invocationOnMock -> {
                     RestaurantEntity arg = invocationOnMock.getArgument(0);
@@ -48,10 +46,8 @@ class AdminServiceTest {
                     return arg;
                 });
 
-        //invoke
         CreateRestaurantResponse response = adminService.createRestaurant(request);
 
-        //verify
         verify(restaurantRepository, times(1)).save(any(RestaurantEntity.class));
         assertEquals(response.getRestaurantDto().getId(), 1L);
         assertEquals(response.getRestaurantDto().getName(), "restaurant_1");
@@ -105,7 +101,5 @@ class AdminServiceTest {
         assertEquals(response.getRestaurantDto().getAddress(), "address_1");
         assertEquals(response.getRestaurantDto().getMeals().size(), 2);
         assertEquals(response.getRestaurantDto().getMeals().get(0).getName(), "MealName1");
-
-
     }
 }

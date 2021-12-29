@@ -29,7 +29,7 @@ public class UserService {
 
     public List<RestaurantDto> getAllRestaurants() {
         return restaurantRepository.getAllRestaurants().stream()
-                .map(RestaurantMapper.RESTAURANT_INSTANT::mapToRestaurantDto)
+                .map(RestaurantMapper.INSTANCE::mapToRestaurantDto)
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +39,6 @@ public class UserService {
                 .map(voteEntity -> changeVote(voteEntity, restaurantId))
                 .orElse(createVote(restaurantId, userId));
         voteRepository.save(resultVote);
-
     }
 
     private VoteEntity changeVote(VoteEntity voteEntity, Long restaurantId) {
