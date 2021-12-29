@@ -25,14 +25,14 @@ public class UserController {
     }
 
     @PostMapping("/restaurants/{id}/vote")
-    public ResponseEntity<Throwable> vote(@PathVariable Long id) {
+    public ResponseEntity vote(@PathVariable Long id) {
         userService.vote(id, userService.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
-    public ResponseEntity<Throwable> IllegalArgumentException (IllegalArgumentException illegalArgumentException) {
-        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    public ResponseEntity IllegalArgumentException (IllegalArgumentException illegalArgumentException) {
+        return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
     }
 
 }

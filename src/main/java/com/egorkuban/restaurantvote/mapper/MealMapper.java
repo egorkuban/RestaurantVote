@@ -4,7 +4,6 @@ import com.egorkuban.restaurantvote.jpa.entity.MealEntity;
 import com.egorkuban.restaurantvote.model.MealDto;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,8 +11,9 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@Component
 public class MealMapper {
+
+    public final static MealMapper MEAL_INSTANT = new MealMapper();
 
     public List<MealEntity> mapToMealsEntity(List<MealDto> meals) {
         if (meals == null) {

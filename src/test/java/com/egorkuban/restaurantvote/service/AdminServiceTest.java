@@ -3,8 +3,6 @@ package com.egorkuban.restaurantvote.service;
 import com.egorkuban.restaurantvote.jpa.entity.MealEntity;
 import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
 import com.egorkuban.restaurantvote.jpa.repository.RestaurantRepository;
-import com.egorkuban.restaurantvote.mapper.MealMapper;
-import com.egorkuban.restaurantvote.mapper.RestaurantMapper;
 import com.egorkuban.restaurantvote.model.MealDto;
 import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
@@ -27,16 +25,12 @@ import static org.mockito.Mockito.*;
 
 class AdminServiceTest {
     AdminService adminService;
-    RestaurantMapper restaurantMapper;
-    MealMapper mealMapper;
     RestaurantRepository restaurantRepository;
 
     @BeforeEach
     public void init() {
-        mealMapper = new MealMapper();
-        restaurantMapper = new RestaurantMapper(mealMapper);
         restaurantRepository = mock(RestaurantRepository.class);
-        adminService = new AdminService(restaurantRepository, restaurantMapper, mealMapper);
+        adminService = new AdminService(restaurantRepository);
     }
 
     @Test
@@ -69,7 +63,7 @@ class AdminServiceTest {
         RestaurantEntity restaurant = new RestaurantEntity()
                 .setId(1L);
         when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
-        adminService.deleteRestaurant(eq(1L));
+        adminService.deleteRestaurant(1L);
         verify(restaurantRepository, times(1)).delete(eq(restaurant));
     }
 
@@ -109,8 +103,8 @@ class AdminServiceTest {
         assertEquals(response.getRestaurantDto().getId(), 1L);
         assertEquals(response.getRestaurantDto().getName(), "restaurant_1");
         assertEquals(response.getRestaurantDto().getAddress(), "address_1");
-        assertEquals(response.getRestaurantDto().getMeals().size(),2);
-        assertEquals(response.getRestaurantDto().getMeals().get(0),"MealName1");
+        assertEquals(response.getRestaurantDto().getMeals().size(), 2);
+        assertEquals(response.getRestaurantDto().getMeals().get(0).getName(), "MealName1");
 
 
     }

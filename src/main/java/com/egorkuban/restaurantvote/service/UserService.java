@@ -7,7 +7,6 @@ import com.egorkuban.restaurantvote.jpa.repository.UserRepository;
 import com.egorkuban.restaurantvote.jpa.repository.VoteRepository;
 import com.egorkuban.restaurantvote.mapper.RestaurantMapper;
 import com.egorkuban.restaurantvote.model.RestaurantDto;
-import com.egorkuban.restaurantvote.model.response.VoteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,24 +26,20 @@ public class UserService {
     private final RestaurantRepository restaurantRepository;
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
-    private final RestaurantMapper mapper;
 
     public List<RestaurantDto> getAllRestaurants() {
         return restaurantRepository.getAllRestaurants().stream()
-                .map(mapper::mapToRestaurantDto)
+                .map(RestaurantMapper.RESTAURANT_INSTANT::mapToRestaurantDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public VoteResponse vote(Long restaurantId, Long userId) {
+    public void vote(Long restaurantId, Long userId) {
         VoteEntity resultVote = voteRepository.findByVoteDateAndUserId(LocalDate.now(), userId)
                 .map(voteEntity -> changeVote(voteEntity, restaurantId))
                 .orElse(createVote(restaurantId, userId));
         voteRepository.save(resultVote);
 
-        return new VoteResponse()
-                .setRestaurantId(restaurantId)
-                .setVoteDate(resultVote.getVoteDate());
     }
 
     private VoteEntity changeVote(VoteEntity voteEntity, Long restaurantId) {

@@ -20,8 +20,8 @@ import java.util.List;
 public class AdminService {
 
     private final RestaurantRepository restaurantRepository;
-    private final RestaurantMapper mapper;
-    private final MealMapper mealMapper;
+
+
 
 
     @Transactional
@@ -32,7 +32,7 @@ public class AdminService {
         restaurantRepository.save(restaurant);
 
         return new CreateRestaurantResponse()
-                .setRestaurantDto(mapper.mapToRestaurantDto(restaurant));
+                .setRestaurantDto(RestaurantMapper.RESTAURANT_INSTANT.mapToRestaurantDto(restaurant));
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class AdminService {
         RestaurantEntity restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
 
-        List<MealEntity> mealEntities = mealMapper.mapToMealsEntity(request.getMeals());
+        List<MealEntity> mealEntities = MealMapper.MEAL_INSTANT.mapToMealsEntity(request.getMeals());
         restaurant.getMeals().clear();
         mealEntities.forEach(e -> e.setRestaurant(restaurant));
         restaurant.getMeals().addAll(mealEntities);
@@ -55,7 +55,7 @@ public class AdminService {
         restaurantRepository.save(restaurant);
 
         return new CreatMealResponse()
-                .setRestaurantDto(mapper.mapToRestaurantDto(restaurant));
+                .setRestaurantDto(RestaurantMapper.RESTAURANT_INSTANT.mapToRestaurantDto(restaurant));
     }
 
 }
