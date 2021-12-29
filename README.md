@@ -17,8 +17,10 @@ POST `http://localhost:8080/api/v1/admin/create`
 
 Request Body JSON
 ``` 
-{"name": "Ресторан",
-"address": "Адрес"}
+{
+   "name":"Ресторан",
+   "address":"Адрес"
+}
 ``` 
  ____________________________
 
@@ -28,18 +30,21 @@ POST `http://localhost:8080/api/v1/admin/restaurants/{id}/meals`
 
 Request Body JSON
 ``` 
-{"meals": 
-
-[
-
-{"name": "суп","price": "200"},
-
-{"name": "паста","price": "300"},
-
-{"name": "кофе","price": "100"}
-
-]
- 
+{
+   "meals":[
+      {
+         "name":"суп",
+         "price":"200"
+      },
+      {
+         "name":"паста",
+         "price":"300"
+      },
+      {
+         "name":"кофе",
+         "price":"100"
+      }
+   ]
 }
 ``` 
  ____________________________
