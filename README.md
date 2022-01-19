@@ -12,17 +12,19 @@ REST API  Spring-Boot without frontend https://github.com/JavaWebinar/topjava/bl
 
 ### User data
  ____________________________
- User
- ```
- email - user@user.com
+```
+User
+
+email - user@user.com
  
- password - user
+password - user
  
- Admin
- email - admin@admin.com
+Admin
+
+email - admin@admin.com
  
- password - admin
- ``` 
+password - admin
+``` 
 ### URL for Admin
 
  ____________________________
