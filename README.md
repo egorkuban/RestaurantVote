@@ -9,8 +9,20 @@ REST API  Spring-Boot without frontend https://github.com/JavaWebinar/topjava/bl
 * If user votes again the same day:
     - If it is before 11:00 we assume that he changed his mind.
     - If it is after 11:00 then it is too late, vote can't be changed
-### URL for Admin
+
+### User data
  ____________________________
+ User
+ email - user@user.com
+ password - user
+ Admin
+ email - admin@admin.com
+ password - admin
+ 
+### URL for Admin
+
+ ____________________________
+ 
 create new restaurant
  
 POST `http://localhost:8080/api/v1/admin/create`
