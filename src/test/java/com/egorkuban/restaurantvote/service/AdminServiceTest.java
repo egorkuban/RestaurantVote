@@ -1,13 +1,14 @@
 package com.egorkuban.restaurantvote.service;
 
-import com.egorkuban.restaurantvote.jpa.entity.MealEntity;
-import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
-import com.egorkuban.restaurantvote.jpa.repository.RestaurantRepository;
-import com.egorkuban.restaurantvote.model.MealDto;
-import com.egorkuban.restaurantvote.model.request.CreateMealRequest;
-import com.egorkuban.restaurantvote.model.request.CreateRestaurantRequest;
-import com.egorkuban.restaurantvote.model.response.CreatMealResponse;
-import com.egorkuban.restaurantvote.model.response.CreateRestaurantResponse;
+import com.egorkuban.restaurantvote.jpa.model.Meal;
+import com.egorkuban.restaurantvote.jpa.model.Restaurant;
+import com.egorkuban.restaurantvote.repository.MealRepository;
+import com.egorkuban.restaurantvote.repository.RestaurantRepository;
+import com.egorkuban.restaurantvote.to.MealDto;
+import com.egorkuban.restaurantvote.to.request.CreateMealRequest;
+import com.egorkuban.restaurantvote.to.request.CreateRestaurantRequest;
+import com.egorkuban.restaurantvote.to.response.CreatMealResponse;
+import com.egorkuban.restaurantvote.to.response.CreateRestaurantResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -24,13 +25,17 @@ import static org.mockito.Mockito.*;
 
 
 class AdminServiceTest {
-    AdminService adminService;
+    RestaurantService restaurantService;
+    MealService mealService;
     RestaurantRepository restaurantRepository;
+    MealRepository mealRepository;
 
     @BeforeEach
     public void init() {
         restaurantRepository = mock(RestaurantRepository.class);
-        adminService = new AdminService(restaurantRepository);
+        mealRepository = mock(MealRepository.class);
+        restaurantService = new RestaurantService(restaurantRepository);
+        mealService = new MealService(restaurantRepository,mealRepository);
     }
 
     @Test
@@ -39,16 +44,16 @@ class AdminServiceTest {
         request.setName("restaurant_1");
         request.setAddress("address_1");
 
-        when(restaurantRepository.save(any(RestaurantEntity.class)))
-                .then((Answer<RestaurantEntity>) invocationOnMock -> {
-                    RestaurantEntity arg = invocationOnMock.getArgument(0);
+        when(restaurantRepository.save(any(Restaurant.class)))
+                .then((Answer<Restaurant>) invocationOnMock -> {
+                    Restaurant arg = invocationOnMock.getArgument(0);
                     arg.setId(1L);
                     return arg;
                 });
 
-        CreateRestaurantResponse response = adminService.createRestaurant(request);
+        CreateRestaurantResponse response = restaurantService.createRestaurant(request);
 
-        verify(restaurantRepository, times(1)).save(any(RestaurantEntity.class));
+        verify(restaurantRepository, times(1)).save(any(Restaurant.class));
         assertEquals(response.getRestaurantDto().getId(), 1L);
         assertEquals(response.getRestaurantDto().getName(), "restaurant_1");
         assertEquals(response.getRestaurantDto().getAddress(), "address_1");
@@ -56,10 +61,10 @@ class AdminServiceTest {
 
     @Test
     void deleteRestaurantTest() {
-        RestaurantEntity restaurant = new RestaurantEntity()
+        Restaurant restaurant = new Restaurant()
                 .setId(1L);
         when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
-        adminService.deleteRestaurant(1L);
+        restaurantService.deleteRestaurant(1L);
         verify(restaurantRepository, times(1)).delete(eq(restaurant));
     }
 
@@ -77,12 +82,12 @@ class AdminServiceTest {
         CreateMealRequest request = new CreateMealRequest();
         request.setMeals(meals);
 
-        RestaurantEntity restaurant = new RestaurantEntity()
+        Restaurant restaurant = new Restaurant()
                 .setId(1L)
                 .setName("restaurant_1")
                 .setAddress("address_1");
-        List<MealEntity> meal = new ArrayList<>(Arrays.asList(
-                new MealEntity()
+        List<Meal> meal = new ArrayList<>(Arrays.asList(
+                new Meal()
                         .setName("name")
                         .setPrice(BigDecimal.valueOf(20))
                         .setId(1L)
@@ -93,13 +98,10 @@ class AdminServiceTest {
         when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
 
 
-        CreatMealResponse response = adminService.createMeals(request, restaurant.getId());
+        CreatMealResponse response = mealService.createMenu(request, restaurant.getId());
 
         verify(restaurantRepository, times(1)).save(eq(restaurant));
-        assertEquals(response.getRestaurantDto().getId(), 1L);
-        assertEquals(response.getRestaurantDto().getName(), "restaurant_1");
-        assertEquals(response.getRestaurantDto().getAddress(), "address_1");
-        assertEquals(response.getRestaurantDto().getMeals().size(), 2);
-        assertEquals(response.getRestaurantDto().getMeals().get(0).getName(), "MealName1");
+        assertEquals(response.getMenuDto().getMeals().size(), 2);
+        assertEquals(response.getMenuDto().getMeals().get(0).getName(), "MealName1");
     }
 }

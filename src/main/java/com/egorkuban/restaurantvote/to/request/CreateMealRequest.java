@@ -1,6 +1,6 @@
-package com.egorkuban.restaurantvote.model.request;
+package com.egorkuban.restaurantvote.to.request;
 
-import com.egorkuban.restaurantvote.model.MealDto;
+import com.egorkuban.restaurantvote.to.MealDto;
 import lombok.Getter;
 import lombok.Setter;
 

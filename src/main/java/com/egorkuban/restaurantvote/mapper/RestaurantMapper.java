@@ -1,16 +1,15 @@
 package com.egorkuban.restaurantvote.mapper;
 
-import com.egorkuban.restaurantvote.jpa.entity.RestaurantEntity;
-import com.egorkuban.restaurantvote.model.RestaurantDto;
+import com.egorkuban.restaurantvote.jpa.model.Restaurant;
+import com.egorkuban.restaurantvote.to.RestaurantDto;
 
 public class RestaurantMapper {
-    public final static RestaurantMapper INSTANCE = new RestaurantMapper();
+    public static final RestaurantMapper INSTANCE = new RestaurantMapper();
 
-    public RestaurantDto mapToRestaurantDto(RestaurantEntity entity) {
+    public RestaurantDto mapToRestaurantDto(Restaurant restaurant) {
         return new RestaurantDto()
-                .setId(entity.getId())
-                .setName(entity.getName())
-                .setAddress(entity.getAddress())
-                .setMeals(MealMapper.INSTANCE.mapToMealsDto(entity.getMeals()));
+                .setId(restaurant.getId())
+                .setName(restaurant.getName())
+                .setAddress(restaurant.getAddress());
     }
 }

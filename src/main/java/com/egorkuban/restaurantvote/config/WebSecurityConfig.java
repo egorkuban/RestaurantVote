@@ -1,15 +1,14 @@
 package com.egorkuban.restaurantvote.config;
 
 import com.egorkuban.restaurantvote.jpa.Role;
-import com.egorkuban.restaurantvote.jpa.entity.UserEntity;
-import com.egorkuban.restaurantvote.jpa.repository.UserRepository;
+import com.egorkuban.restaurantvote.jpa.model.User;
+import com.egorkuban.restaurantvote.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -43,9 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected UserDetailsService userDetailsService() {
         return email -> {
-            UserEntity user = userRepository.findByEmail(email)
+            User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
-            return User.builder()
+            return org.springframework.security.core.userdetails.User.builder()
                      .username(user.getEmail())
                      .password(passwordEncoder().encode(user.getPassword()))
                      .authorities(user.getRoles())

@@ -1,4 +1,4 @@
-package com.egorkuban.restaurantvote.jpa.entity;
+package com.egorkuban.restaurantvote.jpa.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,26 +7,26 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
-@Table(schema = "public", name = "meals")
+@Table(schema = "public", name = "vote")
 @Getter
 @Setter
 @Accessors(chain = true)
-public class MealEntity {
+public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "price")
-    private BigDecimal price;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private RestaurantEntity restaurant;
+    private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+    @Column(name = "date_vote",nullable = false)
+    private LocalDate voteDate;
 }

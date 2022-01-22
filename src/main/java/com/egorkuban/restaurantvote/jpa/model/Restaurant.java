@@ -1,4 +1,4 @@
-package com.egorkuban.restaurantvote.jpa.entity;
+package com.egorkuban.restaurantvote.jpa.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,17 +12,17 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class RestaurantEntity {
+public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name",nullable = false)
     private String name;
 
-    @Column(name = "address")
+    @Column(name = "address",nullable = false)
     private String address;
 
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<MealEntity> meals;
+    private List<Meal> meals;
 }

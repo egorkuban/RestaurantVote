@@ -1,4 +1,4 @@
-package com.egorkuban.restaurantvote.model.request;
+package com.egorkuban.restaurantvote.to.request;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.egorkuban.restaurantvote.jpa.entity;
+package com.egorkuban.restaurantvote.jpa.model;
 
 import com.egorkuban.restaurantvote.jpa.Role;
 import lombok.Getter;
@@ -13,19 +13,19 @@ import java.util.Set;
 @Table(schema = "public", name = "users")
 @Getter
 @Setter
-public class UserEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email")
+    @Column(name = "email",nullable = false)
     private String email;
-    @Column(name = "password")
+    @Column(name = "password",nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
+    @Column(name = "role",nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)

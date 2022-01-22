@@ -1,6 +1,6 @@
-package com.egorkuban.restaurantvote.model.response;
+package com.egorkuban.restaurantvote.to.response;
 
-import com.egorkuban.restaurantvote.model.RestaurantDto;
+import com.egorkuban.restaurantvote.to.RestaurantDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -8,6 +8,6 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class CreatMealResponse {
+public class CreateRestaurantResponse {
     RestaurantDto restaurantDto;
 }
