@@ -1,14 +1,13 @@
 package com.egorkuban.restaurantvote.service;
 
-import com.egorkuban.restaurantvote.jpa.model.Meal;
+import com.egorkuban.restaurantvote.jpa.model.Dish;
 import com.egorkuban.restaurantvote.jpa.model.Menu;
 import com.egorkuban.restaurantvote.jpa.model.Restaurant;
-import com.egorkuban.restaurantvote.mapper.MealMapper;
+import com.egorkuban.restaurantvote.mapper.DishMapper;
 import com.egorkuban.restaurantvote.mapper.MenuMapper;
-import com.egorkuban.restaurantvote.repository.MealRepository;
 import com.egorkuban.restaurantvote.repository.MenuRepository;
 import com.egorkuban.restaurantvote.repository.RestaurantRepository;
-import com.egorkuban.restaurantvote.to.MealDto;
+import com.egorkuban.restaurantvote.to.DishDto;
 import com.egorkuban.restaurantvote.to.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.to.response.CreatMealResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,43 +23,34 @@ import java.util.List;
 public class MealService {
 
     private final RestaurantRepository restaurantRepository;
-    private final MealRepository mealRepository;
     private final MenuRepository menuRepository;
 
     @Transactional
-    public CreatMealResponse createMenu(CreateMealRequest request, Long id) {
-        List<Meal> meals = MealMapper.INSTANCE.mapToMeals(request.getMeals());
-        Restaurant restaurant = restaurantRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
-       Menu menu = menuRepository.findByRestaurantIdAndIsActual(id)
-               .map(menu1 -> {
-                   menu1.setIsActual(false);
-                   return createNewMenu(meals,restaurant);
-               })
-               .orElse(createNewMenu(meals,restaurant));
-
-       restaurant.getMenu().add(menu);
-       menuRepository.save(menu);
-       restaurantRepository.save(restaurant);
-
-
-
+    public CreatMealResponse createMenu(CreateMealRequest request, Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.getById(restaurantId);
+        menuRepository.findActualMenu(restaurant,request.getMenuDate())
+                .ifPresent(menu -> menu.setIsActual(Boolean.FALSE));
+        Menu newActualMenu = new Menu()
+                .setIsActual(true)
+                .setDate(request.getMenuDate())
+                .setRestaurant(restaurant)
+                .setDishes(DishMapper.INSTANCE.mapToEntity(request.getDishes()));
+        newActualMenu.getDishes().forEach(meal -> meal.setMenu(newActualMenu));
+        menuRepository.save(newActualMenu);
         return new CreatMealResponse()
-                .setMenuDto(MenuMapper.INSTANCE.mapToMenuDto(request.getMeals()));
+                .setMenuDto(MenuMapper.INSTANCE.mapToMenuDto(request.getDishes()));
     }
-    private Menu createNewMenu(List<Meal> meals, Restaurant restaurant){
-        return MenuMapper.INSTANCE.mapToMenu(meals,restaurant);
-    }
-    @Transactional
-    public List<MealDto> getMenu(LocalDate date, int restaurantId){
-        Restaurant restaurant = restaurantRepository.getById((long) restaurantId);
 
-        return mealRepository.findAllByDateAndMenu_Restaurant(date, restaurant)
-                .stream().map(meal -> {
-                    MealDto mealTo = new MealDto();
-                    mealTo.setName(meal.getName());
-                    mealTo.setPrice(meal.getPrice());
-                    return mealTo;
-                }).toList();
+    @Transactional
+    public List<DishDto> getMenu(LocalDate date, long restaurantId) {
+        Restaurant restaurant = restaurantRepository.getById(restaurantId);
+        Menu menu = menuRepository.findActualMenu(restaurant,date)
+                .orElseThrow(()->new IllegalArgumentException("Menu not created yet"));
+        List<Dish> dishes = menu.getDishes();
+        return dishes.stream()
+                .map(dish -> new DishDto()
+                        .setName(dish.getName())
+                        .setPrice(dish.getPrice()))
+                .toList();
     }
 }

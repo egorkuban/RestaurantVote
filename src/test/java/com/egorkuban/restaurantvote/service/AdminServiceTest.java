@@ -1,12 +1,12 @@
 package com.egorkuban.restaurantvote.service;
 
-import com.egorkuban.restaurantvote.jpa.model.Meal;
+import com.egorkuban.restaurantvote.jpa.model.Dish;
 import com.egorkuban.restaurantvote.jpa.model.Menu;
 import com.egorkuban.restaurantvote.jpa.model.Restaurant;
 import com.egorkuban.restaurantvote.repository.MealRepository;
 import com.egorkuban.restaurantvote.repository.MenuRepository;
 import com.egorkuban.restaurantvote.repository.RestaurantRepository;
-import com.egorkuban.restaurantvote.to.MealDto;
+import com.egorkuban.restaurantvote.to.DishDto;
 import com.egorkuban.restaurantvote.to.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.to.request.CreateRestaurantRequest;
 import com.egorkuban.restaurantvote.to.response.CreatMealResponse;
@@ -40,7 +40,7 @@ class AdminServiceTest {
         mealRepository = mock(MealRepository.class);
         menuRepository = mock(MenuRepository.class);
         restaurantService = new RestaurantService(restaurantRepository);
-        mealService = new MealService(restaurantRepository,mealRepository,menuRepository);
+        mealService = new MealService(restaurantRepository,menuRepository);
     }
 
     @Test
@@ -75,33 +75,33 @@ class AdminServiceTest {
 
     @Test
     void createMealsTest() {
-        List<MealDto> meals = new ArrayList<>(Arrays.asList(
-                new MealDto()
+        List<DishDto> meals = new ArrayList<>(Arrays.asList(
+                new DishDto()
                         .setName("MealName1")
                         .setPrice(BigDecimal.valueOf(100)),
-                new MealDto()
+                new DishDto()
                         .setName("MealName2")
                         .setPrice(BigDecimal.valueOf(150))
         ));
 
         CreateMealRequest request = new CreateMealRequest();
-        request.setMeals(meals);
+        request.setDishes(meals);
 
         Restaurant restaurant = new Restaurant()
                 .setId(1L)
                 .setName("restaurant_1")
                 .setAddress("address_1");
-        List<Meal> meal = new ArrayList<>(Arrays.asList(
-                new Meal()
+        List<Dish> dish = new ArrayList<>(Arrays.asList(
+                new Dish()
                         .setName("name")
                         .setPrice(BigDecimal.valueOf(20))
                         .setId(1L)));
         Menu menu = new Menu()
                         .setDate(LocalDate.now())
                         .setRestaurant(restaurant)
-                        .setMeals(meal)
+                        .setDishes(dish)
                         .setId(1L);
-        restaurant.getMenu().add(menu);
+        restaurant.getDishes().add(menu);
 
         when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
 
@@ -109,7 +109,7 @@ class AdminServiceTest {
         CreatMealResponse response = mealService.createMenu(request, restaurant.getId());
 
         verify(restaurantRepository, times(1)).save(eq(restaurant));
-        assertEquals(response.getMenuDto().getMeals().size(), 2);
-        assertEquals(response.getMenuDto().getMeals().get(0).getName(), "MealName1");
+        assertEquals(response.getMenuDto().getDishes().size(), 2);
+        assertEquals(response.getMenuDto().getDishes().get(0).getName(), "MealName1");
     }
 }

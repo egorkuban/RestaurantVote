@@ -18,6 +18,10 @@ INSERT INTO restaurant (ID, NAME, ADDRESS)
 VALUES (1, 'Ресторан', 'Адрес Ресторана'),
        (2, 'Кафе', 'Адрес Кафе');
 
+INSERT INTO MENU (ID,RESTAURANT_ID, DATE, DATE_CREATE, IS_ACTUAL)
+VALUES (1,1,now(),now(),true),
+       (2,2,now(),now(),true);
+
 INSERT INTO DISH (ID, NAME, PRICE,MENU_ID,DATE)
 VALUES (1, 'Суп', 200, 1,now()),
        (2, 'Паста', 300, 1,now()),
@@ -26,9 +30,7 @@ VALUES (1, 'Суп', 200, 1,now()),
        (5, 'Курица с грибами', 250, 2,now()),
        (6, 'Чай', 80, 2,now());
 
-INSERT INTO MENU (ID,RESTAURANT_ID, DATE, DATE_CREATE, ISACTUAL)
-VALUES (1,1,now(),now(),true),
-       (2,2,now(),now(),true);
+
 
 INSERT INTO vote (ID, RESTAURANT_ID, USER_ID, DATE_VOTE)
 VALUES (1, 1, 2, '2021-12-29'),

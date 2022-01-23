@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,19 +20,24 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "menu",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Meal> meals;
+    @Column(name = "date")
+    private LocalDate date;
+
+    @Column(name = "date_create")
+    private LocalDateTime dateCreate;
+
+    @Column(name = "is_actual")
+    private Boolean isActual = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Dish> dishes = new ArrayList<>();
 
-    @Column(name = "date_create")
-    private LocalDate dateCreate;
-
-    @Column(name = "isActual")
-    private Boolean isActual = true;
+    @PrePersist
+    public void preCreate() {
+        dateCreate = LocalDateTime.now();
+    }
 }

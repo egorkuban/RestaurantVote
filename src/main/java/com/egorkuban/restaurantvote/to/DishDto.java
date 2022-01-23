@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class MealDto {
+public class DishDto {
     private String name;
     private BigDecimal price;
 }

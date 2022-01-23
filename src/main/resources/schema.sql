@@ -1,6 +1,6 @@
 DROP TABLE user_roles IF EXISTS;
 DROP TABLE vote IF EXISTS;
-DROP TABLE menu IF EXISTS;
+DROP TABLE dish IF EXISTS;
 DROP TABLE dish IF EXISTS;
 DROP TABLE users IF EXISTS;
 DROP TABLE restaurant IF EXISTS;
@@ -13,25 +13,24 @@ CREATE TABLE restaurant
 );
 CREATE UNIQUE INDEX restaurant_unique_index on restaurant (name, address);
 
-
-CREATE TABLE dish
-(
-    id      INTEGER IDENTITY PRIMARY KEY NOT NULL,
-    name    VARCHAR(255)                 NOT NULL,
-    price   DECIMAL                      NOT NULL,
-    menu_id INTEGER                       NOT NULL,
-    date    DATE DEFAULT now()           NOT NULL
-);
-
 CREATE TABLE menu
 (
     id            INTEGER IDENTITY PRIMARY KEY NOT NULL,
     restaurant_id BIGINT                       NOT NULL,
     date          DATE      DEFAULT now()      NOT NULL,
     date_create   TIMESTAMP DEFAULT now()      NOT NULL,
-    isActual      boolean                      NOT NULL,
+    is_actual      boolean                      NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
+);
 
+CREATE TABLE dish
+(
+    id      INTEGER IDENTITY PRIMARY KEY NOT NULL,
+    name    VARCHAR(255)                 NOT NULL,
+    price   DECIMAL                      NOT NULL,
+    menu_id INTEGER                      NOT NULL,
+    date    DATE DEFAULT now()           NOT NULL,
+    FOREIGN KEY (menu_id) REFERENCES menu (id) ON DELETE CASCADE
 );
 
 

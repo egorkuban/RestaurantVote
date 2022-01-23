@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class Meal {
+public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

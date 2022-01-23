@@ -42,14 +42,14 @@ Request Body JSON
 ``` 
  ____________________________
 
-create meals for restaurant
+create dishes for restaurant
 
-POST `http://localhost:8080/api/v1/admin/restaurants/{id}/meals`
+POST `http://localhost:8080/api/v1/admin/restaurants/{id}/dishes`
 
 Request Body JSON
 ``` 
 {
-   "meals":[
+   "dishes":[
       {
          "name":"суп",
          "price":"200"
@@ -75,7 +75,7 @@ POST `http://localhost:8080/api/v1/admin/restaurants/{id}/delete`
 
 ### URL for User
 
-get all restaurants withs meals
+get all restaurants withs dishes
 
 GET `http://localhost:8080/api/v1/user/restaurants`
 

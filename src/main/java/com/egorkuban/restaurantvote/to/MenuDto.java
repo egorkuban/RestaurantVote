@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class MenuDto {
-    private List<MealDto> meals;
+    private List<DishDto> dishes;
     private LocalDate localDate;
 
 }

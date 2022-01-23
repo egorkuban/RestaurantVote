@@ -35,7 +35,7 @@ class UserServiceTest {
         menuRepository = mock(MenuRepository.class);
         voteService = spy(new VoteService(voteRepository,restaurantRepository,userRepository));
         restaurantService = new RestaurantService(restaurantRepository);
-        mealService = new MealService(restaurantRepository,mealRepository,menuRepository);
+        mealService = new MealService(restaurantRepository,menuRepository);
     }
 
     @Test
@@ -45,12 +45,12 @@ class UserServiceTest {
         restaurant.setAddress("AddressRestaurant");
         restaurant.setId(1L);
 
-        List<Meal> meals = new ArrayList<>(Arrays.asList(
-                new Meal()
+        List<Dish> dishes = new ArrayList<>(Arrays.asList(
+                new Dish()
                         .setName("mealName")
                         .setId(1L)
                         .setPrice(BigDecimal.valueOf(500)),
-                new Meal()
+                new Dish()
                         .setName("mealName1")
                         .setId(2L)
                         .setPrice(BigDecimal.valueOf(400))
@@ -59,11 +59,11 @@ class UserServiceTest {
         Menu menu = new Menu();
         menu.setRestaurant(restaurant);
         menu.setDate(LocalDate.now());
-        menu.setMeals(meals);
+        menu.setDishes(dishes);
         menus.add(menu);
 
 
-        restaurant.setMenu(menus);
+        restaurant.setDishes(menus);
 
         List<Restaurant> restaurantsList = new ArrayList<>();
         restaurantsList.add(restaurant);
