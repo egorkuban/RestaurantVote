@@ -7,6 +7,7 @@ import com.egorkuban.restaurantvote.to.MealDto;
 import com.egorkuban.restaurantvote.to.MenuDto;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 public class MenuMapper {
@@ -21,7 +22,17 @@ public class MenuMapper {
         return new Menu()
                 .setMeals(meals)
                 .setDate(LocalDate.now())
-                .setRestaurant(restaurant);
+                .setRestaurant(restaurant)
+                .setIsActual(true)
+                .setDateCreate(LocalDate.now());
+    }
+    public Menu mapToEmptyMenu (Restaurant restaurant){
+        return new Menu()
+                .setMeals(Collections.emptyList())
+                .setIsActual(true)
+                .setRestaurant(restaurant)
+                .setDateCreate(LocalDate.now())
+                .setDate(LocalDate.now());
     }
 
 }

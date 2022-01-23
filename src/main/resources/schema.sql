@@ -27,10 +27,10 @@ CREATE TABLE menu
 (
     id            INTEGER IDENTITY PRIMARY KEY NOT NULL,
     restaurant_id BIGINT                       NOT NULL,
-    dish_id       INTEGER                      NOT NULL,
-    date          DATE DEFAULT now()           NOT NULL,
-    FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE,
-    FOREIGN KEY (dish_id) REFERENCES dish (id) ON DELETE CASCADE
+    date          DATE      DEFAULT now()      NOT NULL,
+    date_create   TIMESTAMP DEFAULT now()      NOT NULL,
+    isActual      boolean                      NOT NULL,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
 
 );
 

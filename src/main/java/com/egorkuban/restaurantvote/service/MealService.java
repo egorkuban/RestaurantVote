@@ -29,23 +29,27 @@ public class MealService {
 
     @Transactional
     public CreatMealResponse createMenu(CreateMealRequest request, Long id) {
+        List<Meal> meals = MealMapper.INSTANCE.mapToMeals(request.getMeals());
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
+       Menu menu = menuRepository.findByRestaurantIdAndIsActual(id,true)
+               .map(menu1 -> {
+                   menu1.setIsActual(false);
+                   return createNewMenu(meals,restaurant);
+               })
+               .orElse(createNewMenu(meals,restaurant));
 
-        List<Meal> meals = MealMapper.INSTANCE.mapToMeals(request.getMeals());
-        restaurant.getMenu().add(MenuMapper.INSTANCE.mapToMenu(meals, restaurant));
-        Menu menu = new Menu()
-                .setDate(LocalDate.now())
-                .setMeals(meals)
-                .setRestaurant(restaurant);
-        menuRepository.save(menu);
+       restaurant.getMenu().add(menu);
+       menuRepository.save(menu);
+       restaurantRepository.save(restaurant);
 
-        mealRepository.saveAll(meals);
-        restaurantRepository.save(restaurant);
 
 
         return new CreatMealResponse()
                 .setMenuDto(MenuMapper.INSTANCE.mapToMenuDto(request.getMeals()));
+    }
+    private Menu createNewMenu(List<Meal> meals, Restaurant restaurant){
+        return MenuMapper.INSTANCE.mapToMenu(meals,restaurant);
     }
     @Transactional
     public List<MealDto> getMenu(LocalDate date, int restaurantId){

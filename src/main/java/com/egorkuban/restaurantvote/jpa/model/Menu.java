@@ -18,8 +18,7 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
-    @Column(name = "dish_id", nullable = false)
+    @OneToMany(mappedBy = "menu",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Meal> meals;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,4 +27,10 @@ public class Menu {
 
     @Column(name = "date")
     private LocalDate date;
+
+    @Column(name = "date_create")
+    private LocalDate dateCreate;
+
+    @Column(name = "isActual")
+    private Boolean isActual = true;
 }

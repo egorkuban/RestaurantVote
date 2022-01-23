@@ -26,13 +26,9 @@ VALUES (1, 'Суп', 200, 1,now()),
        (5, 'Курица с грибами', 250, 2,now()),
        (6, 'Чай', 80, 2,now());
 
-INSERT INTO MENU (ID,RESTAURANT_ID, DISH_ID, DATE)
-VALUES (1,1,1,now()),
-       (2,1,2,now()),
-       (3,1,3,now()),
-       (4,2,4,now()),
-       (5,2,5,now()),
-       (6,2,6,now());
+INSERT INTO MENU (ID,RESTAURANT_ID, DATE, DATE_CREATE, ISACTUAL)
+VALUES (1,1,now(),now(),true),
+       (2,2,now(),now(),true);
 
 INSERT INTO vote (ID, RESTAURANT_ID, USER_ID, DATE_VOTE)
 VALUES (1, 1, 2, '2021-12-29'),
