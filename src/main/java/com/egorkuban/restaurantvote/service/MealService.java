@@ -32,7 +32,7 @@ public class MealService {
         List<Meal> meals = MealMapper.INSTANCE.mapToMeals(request.getMeals());
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
-       Menu menu = menuRepository.findByRestaurantIdAndIsActual(id,true)
+       Menu menu = menuRepository.findByRestaurantIdAndIsActual(id)
                .map(menu1 -> {
                    menu1.setIsActual(false);
                    return createNewMenu(meals,restaurant);
