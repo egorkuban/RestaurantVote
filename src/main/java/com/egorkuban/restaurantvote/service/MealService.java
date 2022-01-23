@@ -1,10 +1,12 @@
 package com.egorkuban.restaurantvote.service;
 
 import com.egorkuban.restaurantvote.jpa.model.Meal;
+import com.egorkuban.restaurantvote.jpa.model.Menu;
 import com.egorkuban.restaurantvote.jpa.model.Restaurant;
 import com.egorkuban.restaurantvote.mapper.MealMapper;
 import com.egorkuban.restaurantvote.mapper.MenuMapper;
 import com.egorkuban.restaurantvote.repository.MealRepository;
+import com.egorkuban.restaurantvote.repository.MenuRepository;
 import com.egorkuban.restaurantvote.repository.RestaurantRepository;
 import com.egorkuban.restaurantvote.to.MealDto;
 import com.egorkuban.restaurantvote.to.request.CreateMealRequest;
@@ -23,6 +25,7 @@ public class MealService {
 
     private final RestaurantRepository restaurantRepository;
     private final MealRepository mealRepository;
+    private final MenuRepository menuRepository;
 
     @Transactional
     public CreatMealResponse createMenu(CreateMealRequest request, Long id) {
@@ -30,11 +33,16 @@ public class MealService {
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found by Id " + id));
 
         List<Meal> meals = MealMapper.INSTANCE.mapToMeals(request.getMeals());
-        restaurant.getMeals().clear();
-        meals.forEach(e -> e.setRestaurant(restaurant));
-        restaurant.getMeals().addAll(meals);
+        restaurant.getMenu().add(MenuMapper.INSTANCE.mapToMenu(meals, restaurant));
+        Menu menu = new Menu()
+                .setDate(LocalDate.now())
+                .setMeals(meals)
+                .setRestaurant(restaurant);
+        menuRepository.save(menu);
 
+        mealRepository.saveAll(meals);
         restaurantRepository.save(restaurant);
+
 
         return new CreatMealResponse()
                 .setMenuDto(MenuMapper.INSTANCE.mapToMenuDto(request.getMeals()));
@@ -43,7 +51,7 @@ public class MealService {
     public List<MealDto> getMenu(LocalDate date, int restaurantId){
         Restaurant restaurant = restaurantRepository.getById((long) restaurantId);
 
-        return mealRepository.findAllByDateAndRestaurant(date, restaurant)
+        return mealRepository.findAllByDateAndMenu_Restaurant(date, restaurant)
                 .stream().map(meal -> {
                     MealDto mealTo = new MealDto();
                     mealTo.setName(meal.getName());

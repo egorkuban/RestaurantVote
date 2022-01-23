@@ -3,15 +3,13 @@ package com.egorkuban.restaurantvote.jpa.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(schema = "public", name = "meals")
+@Table(schema = "public", name = "dish")
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -29,7 +27,6 @@ public class Meal {
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id",nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Restaurant restaurant;
+    @JoinColumn(name = "menu_id",nullable = false)
+    private Menu menu;
 }

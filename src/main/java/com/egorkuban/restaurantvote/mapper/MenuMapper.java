@@ -1,5 +1,8 @@
 package com.egorkuban.restaurantvote.mapper;
 
+import com.egorkuban.restaurantvote.jpa.model.Meal;
+import com.egorkuban.restaurantvote.jpa.model.Menu;
+import com.egorkuban.restaurantvote.jpa.model.Restaurant;
 import com.egorkuban.restaurantvote.to.MealDto;
 import com.egorkuban.restaurantvote.to.MenuDto;
 
@@ -14,4 +17,11 @@ public class MenuMapper {
                 .setMeals(meals)
                 .setLocalDate(LocalDate.now());
     }
+    public Menu mapToMenu (List<Meal> meals, Restaurant restaurant) {
+        return new Menu()
+                .setMeals(meals)
+                .setDate(LocalDate.now())
+                .setRestaurant(restaurant);
+    }
+
 }

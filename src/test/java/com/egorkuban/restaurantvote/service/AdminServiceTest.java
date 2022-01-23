@@ -1,8 +1,10 @@
 package com.egorkuban.restaurantvote.service;
 
 import com.egorkuban.restaurantvote.jpa.model.Meal;
+import com.egorkuban.restaurantvote.jpa.model.Menu;
 import com.egorkuban.restaurantvote.jpa.model.Restaurant;
 import com.egorkuban.restaurantvote.repository.MealRepository;
+import com.egorkuban.restaurantvote.repository.MenuRepository;
 import com.egorkuban.restaurantvote.repository.RestaurantRepository;
 import com.egorkuban.restaurantvote.to.MealDto;
 import com.egorkuban.restaurantvote.to.request.CreateMealRequest;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,13 +32,15 @@ class AdminServiceTest {
     MealService mealService;
     RestaurantRepository restaurantRepository;
     MealRepository mealRepository;
+    MenuRepository menuRepository;
 
     @BeforeEach
     public void init() {
         restaurantRepository = mock(RestaurantRepository.class);
         mealRepository = mock(MealRepository.class);
+        menuRepository = mock(MenuRepository.class);
         restaurantService = new RestaurantService(restaurantRepository);
-        mealService = new MealService(restaurantRepository,mealRepository);
+        mealService = new MealService(restaurantRepository,mealRepository,menuRepository);
     }
 
     @Test
@@ -90,10 +95,13 @@ class AdminServiceTest {
                 new Meal()
                         .setName("name")
                         .setPrice(BigDecimal.valueOf(20))
-                        .setId(1L)
+                        .setId(1L)));
+        Menu menu = new Menu()
+                        .setDate(LocalDate.now())
                         .setRestaurant(restaurant)
-        ));
-        restaurant.setMeals(meal);
+                        .setMeals(meal)
+                        .setId(1L);
+        restaurant.getMenu().add(menu);
 
         when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
 

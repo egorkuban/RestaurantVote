@@ -37,7 +37,7 @@ public class RestaurantService {
     }
 
     public List<RestaurantDto> getAllRestaurants() {
-        return restaurantRepository.findAllByMeals().stream()
+        return restaurantRepository.findAll().stream()
                 .map(RestaurantMapper.INSTANCE::mapToRestaurantDto)
                 .collect(Collectors.toList());
     }

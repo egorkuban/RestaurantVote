@@ -1,13 +1,7 @@
 package com.egorkuban.restaurantvote.service;
 
-import com.egorkuban.restaurantvote.jpa.model.Meal;
-import com.egorkuban.restaurantvote.jpa.model.Restaurant;
-import com.egorkuban.restaurantvote.jpa.model.User;
-import com.egorkuban.restaurantvote.jpa.model.Vote;
-import com.egorkuban.restaurantvote.repository.MealRepository;
-import com.egorkuban.restaurantvote.repository.RestaurantRepository;
-import com.egorkuban.restaurantvote.repository.UserRepository;
-import com.egorkuban.restaurantvote.repository.VoteRepository;
+import com.egorkuban.restaurantvote.jpa.model.*;
+import com.egorkuban.restaurantvote.repository.*;
 import com.egorkuban.restaurantvote.to.RestaurantDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,16 +25,17 @@ class UserServiceTest {
     MealRepository mealRepository;
     VoteRepository voteRepository;
     UserRepository userRepository;
-
+    MenuRepository menuRepository;
     @BeforeEach
     public void init() {
         restaurantRepository = mock(RestaurantRepository.class);
         voteRepository = mock(VoteRepository.class);
         userRepository = mock(UserRepository.class);
         mealRepository = mock(MealRepository.class);
+        menuRepository = mock(MenuRepository.class);
         voteService = spy(new VoteService(voteRepository,restaurantRepository,userRepository));
         restaurantService = new RestaurantService(restaurantRepository);
-        mealService = new MealService(restaurantRepository,mealRepository);
+        mealService = new MealService(restaurantRepository,mealRepository,menuRepository);
     }
 
     @Test
@@ -53,22 +48,27 @@ class UserServiceTest {
         List<Meal> meals = new ArrayList<>(Arrays.asList(
                 new Meal()
                         .setName("mealName")
-                        .setRestaurant(restaurant)
                         .setId(1L)
                         .setPrice(BigDecimal.valueOf(500)),
                 new Meal()
                         .setName("mealName1")
-                        .setRestaurant(restaurant)
                         .setId(2L)
                         .setPrice(BigDecimal.valueOf(400))
         ));
+        List<Menu> menus = new ArrayList<>();
+        Menu menu = new Menu();
+        menu.setRestaurant(restaurant);
+        menu.setDate(LocalDate.now());
+        menu.setMeals(meals);
+        menus.add(menu);
 
-        restaurant.setMeals(meals);
+
+        restaurant.setMenu(menus);
 
         List<Restaurant> restaurantsList = new ArrayList<>();
         restaurantsList.add(restaurant);
 
-        when(restaurantRepository.findAllByMeals()).thenReturn(restaurantsList);
+        when(restaurantRepository.findAll()).thenReturn(restaurantsList);
 
         List<RestaurantDto> restaurants = restaurantService.getAllRestaurants();
 
