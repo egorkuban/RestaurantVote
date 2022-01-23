@@ -36,8 +36,12 @@ POST `http://localhost:8080/api/v1/admin/restaurants/new`
 Request Body JSON
 ``` 
 {
-   "name":"Ресторан",
-   "address":"Адрес"
+   "name":"Ресторан №1",
+   "address":"Адрес Ресторана №1"
+}
+{
+   "name":"Ресторан №2",
+   "address":"Адрес Ресторана №2"
 }
 ``` 
  ____________________________
@@ -62,6 +66,23 @@ Request Body JSON
       {
          "name":"кофе",
          "price":"100"
+      }
+   ]
+}
+{
+   "menuDate": "2022-01-23",
+   "dishes":[
+      {
+         "name":"пюре",
+         "price":"100"
+      },
+      {
+         "name":"торт",
+         "price":"250"
+      },
+      {
+         "name":"кофе с молоком",
+         "price":"120"
       }
    ]
 }
