@@ -35,7 +35,7 @@ public class MealService {
                 .setDate(request.getMenuDate())
                 .setRestaurant(restaurant)
                 .setDishes(DishMapper.INSTANCE.mapToEntity(request.getDishes()));
-        newActualMenu.getDishes().forEach(meal -> meal.setMenu(newActualMenu));
+        newActualMenu.getDishes().forEach(dish -> dish.setMenu(newActualMenu));
         menuRepository.save(newActualMenu);
         return new CreatMealResponse()
                 .setMenuDto(MenuMapper.INSTANCE.mapToMenuDto(request.getDishes()));

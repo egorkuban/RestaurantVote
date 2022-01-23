@@ -6,10 +6,8 @@ import com.egorkuban.restaurantvote.jpa.model.Restaurant;
 import com.egorkuban.restaurantvote.repository.MealRepository;
 import com.egorkuban.restaurantvote.repository.MenuRepository;
 import com.egorkuban.restaurantvote.repository.RestaurantRepository;
-import com.egorkuban.restaurantvote.to.DishDto;
-import com.egorkuban.restaurantvote.to.request.CreateMealRequest;
+import com.egorkuban.restaurantvote.to.RestaurantDto;
 import com.egorkuban.restaurantvote.to.request.CreateRestaurantRequest;
-import com.egorkuban.restaurantvote.to.response.CreatMealResponse;
 import com.egorkuban.restaurantvote.to.response.CreateRestaurantResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-class AdminServiceTest {
+class RestaurantServiceTest {
     RestaurantService restaurantService;
     MealService mealService;
     RestaurantRepository restaurantRepository;
@@ -72,44 +70,44 @@ class AdminServiceTest {
         restaurantService.deleteRestaurant(1L);
         verify(restaurantRepository, times(1)).delete(eq(restaurant));
     }
-
     @Test
-    void createMealsTest() {
-        List<DishDto> meals = new ArrayList<>(Arrays.asList(
-                new DishDto()
-                        .setName("MealName1")
-                        .setPrice(BigDecimal.valueOf(100)),
-                new DishDto()
-                        .setName("MealName2")
-                        .setPrice(BigDecimal.valueOf(150))
-        ));
+    void getAllRestaurantsTest() {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName("NameRestaurant");
+        restaurant.setAddress("AddressRestaurant");
+        restaurant.setId(1L);
 
-        CreateMealRequest request = new CreateMealRequest();
-        request.setDishes(meals);
-
-        Restaurant restaurant = new Restaurant()
-                .setId(1L)
-                .setName("restaurant_1")
-                .setAddress("address_1");
-        List<Dish> dish = new ArrayList<>(Arrays.asList(
+        List<Dish> dishes = new ArrayList<>(Arrays.asList(
                 new Dish()
-                        .setName("name")
-                        .setPrice(BigDecimal.valueOf(20))
-                        .setId(1L)));
-        Menu menu = new Menu()
-                        .setDate(LocalDate.now())
-                        .setRestaurant(restaurant)
-                        .setDishes(dish)
-                        .setId(1L);
-        restaurant.getDishes().add(menu);
+                        .setName("mealName")
+                        .setId(1L)
+                        .setPrice(BigDecimal.valueOf(500)),
+                new Dish()
+                        .setName("mealName1")
+                        .setId(2L)
+                        .setPrice(BigDecimal.valueOf(400))
+        ));
+        List<Menu> menus = new ArrayList<>();
+        Menu menu = new Menu();
+        menu.setRestaurant(restaurant);
+        menu.setDate(LocalDate.now());
+        menu.setDishes(dishes);
+        menus.add(menu);
 
-        when(restaurantRepository.findById(eq(1L))).thenReturn(Optional.of(restaurant));
 
+        restaurant.setDishes(menus);
 
-        CreatMealResponse response = mealService.createMenu(request, restaurant.getId());
+        List<Restaurant> restaurantsList = new ArrayList<>();
+        restaurantsList.add(restaurant);
 
-        verify(restaurantRepository, times(1)).save(eq(restaurant));
-        assertEquals(response.getMenuDto().getDishes().size(), 2);
-        assertEquals(response.getMenuDto().getDishes().get(0).getName(), "MealName1");
+        when(restaurantRepository.findAll()).thenReturn(restaurantsList);
+
+        List<RestaurantDto> restaurants = restaurantService.getAllRestaurants();
+
+        assertEquals(restaurants.size(),1);
+        assertEquals(restaurants.get(0).getName(),"NameRestaurant");
+        assertEquals(restaurants.get(0).getId(),1L);
     }
+
+
 }

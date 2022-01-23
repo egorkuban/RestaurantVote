@@ -9,7 +9,7 @@ import java.util.List;
 public class MenuMapper {
     public static final MenuMapper INSTANCE = new MenuMapper();
 
-    public MenuDto mapToMenuDto (List<DishDto> dishes){
+    public MenuDto mapToMenuDto(List<DishDto> dishes) {
         return new MenuDto()
                 .setDishes(dishes)
                 .setLocalDate(LocalDate.now());
