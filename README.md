@@ -31,7 +31,7 @@ password - admin
  
 create new restaurant
  
-PUT `http://localhost:8080/api/v1/admin/restaurant`
+POST `http://localhost:8080/api/v1/admin/restaurant`
 
 Request Body JSON
 ``` 
