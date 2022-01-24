@@ -31,7 +31,7 @@ password - admin
  
 create new restaurant
  
-PUT `http://localhost:8080/api/v1/admin/restaurant/new`
+POST `http://localhost:8080/api/v1/admin/restaurant`
 
 Request Body JSON
 ``` 
@@ -91,7 +91,7 @@ Request Body JSON
 
 delete restaurant by id
 
-DELETE`http://localhost:8080/api/v1/admin/restaurant/{restaurantId}/`
+DELETE`http://localhost:8080/api/v1/admin/restaurant/{id}/`
 
  ____________________________
 
@@ -104,7 +104,7 @@ GET `http://localhost:8080/api/v1/user/restaurant/`
  ____________________________
 get a menu for a restaurant
 
-GET `http://localhost:8080/api/v1/user/restaurant/restaurantId/menu`
+GET `http://localhost:8080/api/v1/user/restaurant/{restaurantId}/menu`
 
  ____________________________
 vote 
