@@ -91,7 +91,7 @@ Request Body JSON
 
 delete restaurant by id
 
-DELETE`http://localhost:8080/api/v1/admin/restaurant/{id}/`
+DELETE`http://localhost:8080/api/v1/admin/restaurant/{restaurantId}/`
 
  ____________________________
 
