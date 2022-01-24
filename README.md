@@ -104,7 +104,7 @@ GET `http://localhost:8080/api/v1/user/restaurant/`
  ____________________________
 get a menu for a restaurant
 
-GET `http://localhost:8080/api/v1/user/restaurant/restaurantId/menu`
+GET `http://localhost:8080/api/v1/user/restaurant/{restaurantId}/menu`
 
  ____________________________
 vote 
