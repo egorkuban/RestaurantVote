@@ -18,7 +18,7 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
 
-    @PutMapping("/admin/restaurant/{restaurantId}/menu")
+    @PostMapping("/admin/restaurant/{restaurantId}/menu")
     public ResponseEntity<CreatMealResponse> createMenu(@RequestBody CreateMealRequest request,
                                                         @PathVariable Long restaurantId) {
         return new ResponseEntity<>(menuService.createMenu(request, restaurantId), HttpStatus.CREATED);

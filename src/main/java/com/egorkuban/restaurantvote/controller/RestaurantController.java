@@ -21,10 +21,10 @@ public class RestaurantController {
     public ResponseEntity<CreateRestaurantResponse> createRestaurant(@RequestBody CreateRestaurantRequest request) {
         return new ResponseEntity<>(restaurantService.createRestaurant(request), HttpStatus.CREATED);
     }
-    @DeleteMapping("/admin/restaurant/{id}")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
-        restaurantService.deleteRestaurant(id);
-        return new ResponseEntity<>("Restaurant with id = " + id + " removed", HttpStatus.OK);
+    @DeleteMapping("/admin/restaurant/{restaurantId}")
+    public ResponseEntity<String> deleteRestaurant(@PathVariable Long restaurantId) {
+        restaurantService.deleteRestaurant(restaurantId);
+        return new ResponseEntity<>("Restaurant with id = " + restaurantId + " removed", HttpStatus.OK);
     }
     @GetMapping("/user/restaurant/")
     public ResponseEntity<List<RestaurantDto>> getAllRestaurants() {
