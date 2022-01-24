@@ -31,24 +31,29 @@ password - admin
  
 create new restaurant
  
-POST `http://localhost:8080/api/v1/admin/create`
+PUT `http://localhost:8080/api/v1/admin/restaurant/new`
 
 Request Body JSON
 ``` 
 {
-   "name":"Ресторан",
-   "address":"Адрес"
+   "name":"Ресторан №1",
+   "address":"Адрес Ресторана №1"
+}
+{
+   "name":"Ресторан №2",
+   "address":"Адрес Ресторана №2"
 }
 ``` 
  ____________________________
 
-create dishes for restaurant
+create menu for restaurant
 
-POST `http://localhost:8080/api/v1/admin/restaurants/{id}/dishes`
+PUT `http://localhost:8080/api/v1/admin/restaurant/{restaurantId}/menu/`
 
 Request Body JSON
 ``` 
 {
+   "menuDate": "2022-01-23",
    "dishes":[
       {
          "name":"суп",
@@ -64,25 +69,47 @@ Request Body JSON
       }
    ]
 }
+{
+   "menuDate": "2022-01-23",
+   "dishes":[
+      {
+         "name":"пюре",
+         "price":"100"
+      },
+      {
+         "name":"торт",
+         "price":"250"
+      },
+      {
+         "name":"кофе с молоком",
+         "price":"120"
+      }
+   ]
+}
 ``` 
  ____________________________
 
 delete restaurant by id
 
-POST `http://localhost:8080/api/v1/admin/restaurants/{id}/delete`
+DELETE`http://localhost:8080/api/v1/admin/restaurant/{restaurantId}/`
 
  ____________________________
 
 ### URL for User
 
-get all restaurants withs dishes
+get all restaurants
 
-GET `http://localhost:8080/api/v1/user/restaurants`
+GET `http://localhost:8080/api/v1/user/restaurant/`
+
+ ____________________________
+get a menu for a restaurant
+
+GET `http://localhost:8080/api/v1/user/restaurant/restaurantId/menu
 
  ____________________________
 vote 
 
-POST `http://localhost:8080/api/v1/user/restaurants/{id}/vote`
+POST `http://localhost:8080/api/v1/user/restaurant/{restaurantId}/vote`
 
 
 
