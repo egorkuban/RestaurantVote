@@ -1,6 +1,5 @@
 package com.egorkuban.restaurantvote.service;
 
-import com.egorkuban.restaurantvote.jpa.model.Dish;
 import com.egorkuban.restaurantvote.jpa.model.Menu;
 import com.egorkuban.restaurantvote.jpa.model.Restaurant;
 import com.egorkuban.restaurantvote.mapper.DishMapper;
@@ -15,12 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 
-public class MealService {
+public class MenuService {
 
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
@@ -44,13 +44,9 @@ public class MealService {
     @Transactional
     public List<DishDto> getMenu(LocalDate date, long restaurantId) {
         Restaurant restaurant = restaurantRepository.getById(restaurantId);
-        Menu menu = menuRepository.findActualMenu(restaurant,date)
-                .orElseThrow(()->new IllegalArgumentException("Menu not created yet"));
-        List<Dish> dishes = menu.getDishes();
-        return dishes.stream()
-                .map(dish -> new DishDto()
-                        .setName(dish.getName())
-                        .setPrice(dish.getPrice()))
-                .toList();
+        return menuRepository.findActualMenu(restaurant,date)
+                .map(Menu::getDishes)
+                .map(DishMapper.INSTANCE::mapToDto)
+                .orElse(Collections.emptyList());
     }
 }

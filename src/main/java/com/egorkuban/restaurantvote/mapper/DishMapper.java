@@ -3,7 +3,6 @@ package com.egorkuban.restaurantvote.mapper;
 import com.egorkuban.restaurantvote.jpa.model.Dish;
 import com.egorkuban.restaurantvote.to.DishDto;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,14 +15,34 @@ public class DishMapper {
             return Collections.emptyList();
         }
         return meals.stream()
-                .map(this::mapToMeal)
+                .map(this::mapToEntity)
                 .toList();
     }
 
-    private Dish mapToMeal(DishDto dishDto) {
+    private Dish mapToEntity(DishDto dishDto) {
+        if (dishDto == null) {
+            return null;
+        }
         return new Dish()
                 .setName(dishDto.getName())
-                .setPrice(dishDto.getPrice())
-                .setDate(LocalDate.now());
+                .setPrice(dishDto.getPrice());
+    }
+
+    public DishDto mapToDto(Dish dish) {
+        if (dish == null) {
+            return null;
+        }
+        return new DishDto()
+                .setName(dish.getName())
+                .setPrice(dish.getPrice());
+    }
+
+    public List<DishDto> mapToDto(List<Dish> dishes) {
+        if (dishes == null) {
+            return null;
+        }
+        return dishes.stream()
+                .map(this::mapToDto)
+                .toList();
     }
 }

@@ -7,9 +7,6 @@ import com.egorkuban.restaurantvote.repository.RestaurantRepository;
 import com.egorkuban.restaurantvote.repository.UserRepository;
 import com.egorkuban.restaurantvote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,26 +17,21 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class VoteService {
     private static final LocalTime TIME_EXPIRED_BORDER = LocalTime.of(11, 0);
+    private final UserService userService;
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public void vote(Long restaurantId, Long userId) {
-        Vote resultVote = voteRepository.findByVoteDateAndUserId(LocalDate.now(), userId)
-                .map(vote -> {
-                    try {
-                        return changeVote(vote, restaurantId);
-                    } catch (ChangeVoteException e) {
-                        e.printStackTrace();
-                    }
-                    return vote;
-                })
-                .orElse(createVote(restaurantId, userId));
+    public void vote(Long restaurantId) {
+        User user = userService.getUser();;
+        Vote resultVote = voteRepository.findByVoteDateAndUserId(LocalDate.now(), user.getId())
+                .map(vote -> changeVote(vote, restaurantId))
+                .orElse(createVote(restaurantId, user.getId()));
         voteRepository.save(resultVote);
     }
 
-    private Vote changeVote(Vote vote, Long restaurantId) throws ChangeVoteException {
+    private Vote changeVote(Vote vote, Long restaurantId) {
         if (isTimeExpired()) {
             throw new ChangeVoteException("Current time is after " + TIME_EXPIRED_BORDER + ". You can't vote once more yet");
         }
@@ -57,10 +49,5 @@ public class VoteService {
         return !LocalTime.now().isBefore(TIME_EXPIRED_BORDER);
     }
 
-    public Long getVotingUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + authentication.getName() + " Not found"));
-        return user.getId();
-    }
+
 }

@@ -29,7 +29,6 @@ CREATE TABLE dish
     name    VARCHAR(255)                 NOT NULL,
     price   DECIMAL                      NOT NULL,
     menu_id INTEGER                      NOT NULL,
-    date    DATE DEFAULT now()           NOT NULL,
     FOREIGN KEY (menu_id) REFERENCES menu (id) ON DELETE CASCADE
 );
 

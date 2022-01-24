@@ -22,13 +22,13 @@ INSERT INTO MENU (ID,RESTAURANT_ID, DATE, DATE_CREATE, IS_ACTUAL)
 VALUES (1,1,now(),now(),true),
        (2,2,now(),now(),true);
 
-INSERT INTO DISH (ID, NAME, PRICE,MENU_ID,DATE)
-VALUES (1, 'Суп', 200, 1,now()),
-       (2, 'Паста', 300, 1,now()),
-       (3, 'Кофе', 100, 1,now()),
-       (4, 'Борщ', 250, 2,now()),
-       (5, 'Курица с грибами', 250, 2,now()),
-       (6, 'Чай', 80, 2,now());
+INSERT INTO DISH (ID, NAME, PRICE, MENU_ID)
+VALUES (1, 'Суп', 200, 1),
+       (2, 'Паста', 300, 1),
+       (3, 'Кофе', 100, 1),
+       (4, 'Борщ', 250, 2),
+       (5, 'Курица с грибами', 250, 2),
+       (6, 'Чай', 80, 2);
 
 
 

@@ -1,6 +1,6 @@
 package com.egorkuban.restaurantvote.controller;
 
-import com.egorkuban.restaurantvote.service.MealService;
+import com.egorkuban.restaurantvote.service.MenuService;
 import com.egorkuban.restaurantvote.to.DishDto;
 import com.egorkuban.restaurantvote.to.request.CreateMealRequest;
 import com.egorkuban.restaurantvote.to.response.CreatMealResponse;
@@ -16,16 +16,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class MenuController {
-    private final MealService mealService;
+    private final MenuService menuService;
 
-    @PutMapping("/admin/restaurants/{restaurantId}/menu/new")
+    @PutMapping("/admin/restaurant/{restaurantId}/menu")
     public ResponseEntity<CreatMealResponse> createMenu(@RequestBody CreateMealRequest request,
                                                         @PathVariable Long restaurantId) {
-        return new ResponseEntity<>(mealService.createMenu(request, restaurantId), HttpStatus.CREATED);
+        return new ResponseEntity<>(menuService.createMenu(request, restaurantId), HttpStatus.CREATED);
     }
 
-    @GetMapping("/user/restaurants/{restaurantId}/menu")
+    @GetMapping("/user/restaurant/{restaurantId}/menu")
     public List<DishDto> getMenu(@PathVariable Long restaurantId) {
-        return mealService.getMenu(LocalDate.now(), restaurantId);
+        return menuService.getMenu(LocalDate.now(), restaurantId);
     }
 }

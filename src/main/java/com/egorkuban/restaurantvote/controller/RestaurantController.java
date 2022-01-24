@@ -17,17 +17,16 @@ import java.util.List;
 @RequestMapping("api/v1")
 public class RestaurantController {
     private final RestaurantService restaurantService;
-    @PostMapping("/admin/restaurants/new")
+    @PutMapping("/admin/restaurant")
     public ResponseEntity<CreateRestaurantResponse> createRestaurant(@RequestBody CreateRestaurantRequest request) {
-
         return new ResponseEntity<>(restaurantService.createRestaurant(request), HttpStatus.CREATED);
     }
-    @DeleteMapping("/admin/restaurants/{id}/delete")
+    @DeleteMapping("/admin/restaurant/{id}")
     public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
         restaurantService.deleteRestaurant(id);
         return new ResponseEntity<>("Restaurant with id = " + id + " removed", HttpStatus.OK);
     }
-    @GetMapping("/user/restaurants")
+    @GetMapping("/user/restaurant/")
     public ResponseEntity<List<RestaurantDto>> getAllRestaurants() {
         final List<RestaurantDto> allRestaurantsWithMeals = restaurantService.getAllRestaurants();
         return CollectionUtils.isEmpty(allRestaurantsWithMeals)

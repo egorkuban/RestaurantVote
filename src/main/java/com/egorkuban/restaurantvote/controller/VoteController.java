@@ -12,14 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class VoteController {
     private final VoteService voteService;
 
-    @PostMapping("/user/restaurants/{id}/vote")
-    public ResponseEntity vote(@PathVariable Long id) {
-        voteService.vote(id, voteService.getVotingUserId());
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    public ResponseEntity IllegalArgumentException(IllegalArgumentException illegalArgumentException) {
-        return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+    @PostMapping("/user/restaurant/{restaurantId}/vote")
+    public ResponseEntity<?> vote(@PathVariable Long restaurantId) {
+        voteService.vote(restaurantId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

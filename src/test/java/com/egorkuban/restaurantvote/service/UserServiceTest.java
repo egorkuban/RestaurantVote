@@ -14,8 +14,9 @@ import static org.mockito.Mockito.*;
 
 class UserServiceTest {
     RestaurantService restaurantService;
-    MealService mealService;
+    MenuService menuService;
     VoteService voteService;
+    UserService userService;
     RestaurantRepository restaurantRepository;
     MealRepository mealRepository;
     VoteRepository voteRepository;
@@ -28,9 +29,10 @@ class UserServiceTest {
         userRepository = mock(UserRepository.class);
         mealRepository = mock(MealRepository.class);
         menuRepository = mock(MenuRepository.class);
-        voteService = spy(new VoteService(voteRepository,restaurantRepository,userRepository));
+        userService = mock(UserService.class);
+        voteService = spy(new VoteService(userService, voteRepository,restaurantRepository,userRepository));
         restaurantService = new RestaurantService(restaurantRepository);
-        mealService = new MealService(restaurantRepository,menuRepository);
+        menuService = new MenuService(restaurantRepository,menuRepository);
     }
 
 
@@ -59,7 +61,7 @@ class UserServiceTest {
         when(restaurantRepository.getById(eq(2L))).thenReturn(newVoteRestaurant);
         when(voteService.isTimeExpired()).thenReturn(false);
 
-        voteService.vote(2L, 1L);
+        voteService.vote(2L);
 
         verify(voteRepository).save(argThat((Vote v ) -> v.getUser().getId() == 1L));
     }
@@ -77,7 +79,7 @@ class UserServiceTest {
         when(restaurantRepository.getById(eq(1L))).thenReturn(restaurant);
         when(userRepository.getById(eq(1L))).thenReturn(user);
 
-        voteService.vote(1L, 1L);
+        voteService.vote(1L);
 
         verify(voteRepository).save(argThat((Vote vote ) -> vote.getUser().getId() == 1L));
     }

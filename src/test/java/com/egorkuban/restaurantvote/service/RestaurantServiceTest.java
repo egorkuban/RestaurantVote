@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 class RestaurantServiceTest {
     RestaurantService restaurantService;
-    MealService mealService;
+    MenuService mealService;
     RestaurantRepository restaurantRepository;
     MealRepository mealRepository;
     MenuRepository menuRepository;
@@ -38,7 +38,7 @@ class RestaurantServiceTest {
         mealRepository = mock(MealRepository.class);
         menuRepository = mock(MenuRepository.class);
         restaurantService = new RestaurantService(restaurantRepository);
-        mealService = new MealService(restaurantRepository,menuRepository);
+        mealService = new MenuService(restaurantRepository,menuRepository);
     }
 
     @Test

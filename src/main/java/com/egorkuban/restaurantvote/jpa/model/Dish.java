@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Table(schema = "public", name = "dish")
@@ -23,8 +22,6 @@ public class Dish {
 
     @Column(name = "price",nullable = false)
     private BigDecimal price;
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id",nullable = false)
